@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dino Color Run — Fixed</title>
+<style>
+  :root{
+    --bg-top: #ffecd2;
+    --bg-bottom: #fcb69f;
+    --accent: #ff6b6b;
+    --accent-2: #ffd93d;
+    --ground: #2b2d42;
+    --dino: #06d6a0;
+    --obstacle: #ff7b54;
+    --cloud: rgba(255,255,255,0.9);
+    --glass: rgba(255,255,255,0.12);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg-top),var(--bg-bottom));color:#0b1220}
+  .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;gap:20px}
+  .card{width:100%;max-width:980px;background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));border-radius:16px;padding:18px;box-shadow:0 12px 40px rgba(11,18,32,0.18);border:1px solid rgba(255,255,255,0.06);display:flex;gap:18px;align-items:flex-start}
+  .game-area{flex:1;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .hud{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:18px;box-shadow:0 8px 30px rgba(255,107,107,0.18)}
+  h1{font-size:18px;margin:0}
+  .score{background:var(--glass);padding:8px 12px;border-radius:10px;font-weight:700;color:#08121a;border:1px solid rgba(255,255,255,0.06)}
+  .canvas-wrap{width:100%;max-width:720px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:12px;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+  canvas{display:block;border-radius:8px;background:transparent}
+  .sidebar{width:300px;display:flex;flex-direction:column;gap:12px}
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .btn{display:inline-block;padding:10px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;font-weight:800;border:none;cursor:pointer;box-shadow:0 8px 20px rgba(124,58,237,0.12)}
+  .btn.ghost{background:transparent;color:var(--dino);border:1px solid rgba(11,18,32,0.06)}
+  .small{font-size:13px;padding:8px 10px}
+  .muted{color:rgba(11,18,32,0.6);font-size:13px}
+  @media (max-width:920px){ .card{flex-direction:column;align-items:center} .sidebar{width:100%} .canvas-wrap{max-width:100%} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="application" aria-label="Dino Color Run Fixed">
+      <div class="game-area">
+        <div class="hud">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="logo">Dino</div>
+            <div>
+              <h1>Dino Color Run</h1>
+              <div class="muted">Space / Arrow Up / Ketuk untuk lompat</div>
+            </div>
+          </div>
+          <div class="score" id="score">Skor 0</div>
+        </div>
+
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="gameCanvas" aria-label="Papan permainan Dino"></canvas>
+          <div id="overlay" style="position:absolute;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;pointer-events:none"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="restartBtn" class="btn small">Mulai Ulang</button>
+          <button id="toggleMusic" class="btn ghost small">Suara On</button>
+          <div class="muted" id="speedLabel">Kecepatan: Normal</div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="panel">
+          <div style="font-weight:800;margin-bottom:8px">Kontrol</div>
+          <ul style="margin:10px 0;padding-left:18px">
+            <li class="muted">Space atau Panah Atas untuk lompat</li>
+            <li class="muted">Ketuk layar untuk lompat</li>
+            <li class="muted">Klik Mulai Ulang untuk reset</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <div style="font-weight:800;margin-bottom:8px">Mode Warna</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost small" data-theme="sunny">Sunny</button>
+            <button class="btn ghost small" data-theme="neon">Neon</button>
+            <button class="btn ghost small" data-theme="pastel">Pastel</button>
+            <button class="btn ghost small" id="randomTheme">Acak</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div style="font-weight:800;margin-bottom:8px">Statistik</div>
+          <div class="muted">Terakhir Skor: <strong id="lastScore">0</strong></div>
+          <div class="muted">Rekor: <strong id="bestScore">0</strong></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* Versi perbaikan:
+   - menangani devicePixelRatio untuk canvas
+   - menunda pembuatan AudioContext sampai user gesture
+   - lebih aman saat membaca CSS variables
+   - mencegah error jika ukuran window kecil
+*/
+
+// util
+const $ = sel => document.querySelector(sel);
+const canvas = $('#gameCanvas');
+const ctx = canvas.getContext('2d');
+const scoreEl = $('#score');
+const restartBtn = $('#restartBtn');
+const toggleMusicBtn = $('#toggleMusic');
+const speedLabel = $('#speedLabel');
+const lastScoreEl = $('#lastScore');
+const bestScoreEl = $('#bestScore');
+
+let W = 900, H = 300;
+let running = false, gameOver = false, score = 0;
+let best = Number(localStorage.getItem('dino_best') || 0);
+bestScoreEl.textContent = best;
+let speed = 6, gravity = 0.8, musicOn = true;
+let dpr = Math.max(1, window.devicePixelRatio || 1);
+
+// Dino
+const dino = { x:80, y:0, w:48, h:48, vy:0, grounded:true };
+
+// Entities
+let obstacles = [], clouds = [], particles = [];
+let spawnTimer = 0, cloudTimer = 0;
+
+// Themes
+const themes = {
+  sunny: { '--bg-top':'#ffecd2','--bg-bottom':'#fcb69f','--accent':'#ff6b6b','--accent-2':'#ffd93d','--dino':'#06d6a0','--obstacle':'#ff7b54' },
+  neon: { '--bg-top':'#0f0c29','--bg-bottom':'#302b63','--accent':'#00f5a0','--accent-2':'#7c3aed','--dino':'#00f5a0','--obstacle':'#ff2d95' },
+  pastel: { '--bg-top':'#f6f0ff','--bg-bottom':'#fff1f3','--accent':'#ffb3c1','--accent-2':'#bde0fe','--dino':'#ffd6a5','--obstacle':'#c7f9cc' }
+};
+
+// Safe getter for CSS vars with fallback
+function cssVar(name, fallback){
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name);
+  return (v && v.trim()) || fallback;
+}
+
+// Resize canvas properly (handles DPR)
+function resize(){
+  const containerWidth = Math.min(900, Math.max(600, Math.floor(window.innerWidth * 0.6)));
+  W = containerWidth;
+  H = 300;
+  dpr = Math.max(1, window.devicePixelRatio || 1);
+  canvas.width = Math.floor(W * dpr);
+  canvas.height = Math.floor(H * dpr);
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  // reposition dino on resize
+  dino.y = H - 70;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Input and audio gesture handling
+let audioCtx = null;
+function ensureAudioOnGesture(){
+  if(audioCtx) return;
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // resume if suspended (some browsers require user gesture)
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  }catch(e){
+    audioCtx = null;
+  }
+}
+function playSound(type){
+  if(!musicOn) return;
+  if(!audioCtx) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  if(type === 'jump'){ o.frequency.value = 520; g.gain.value = 0.02; o.start(); o.stop(audioCtx.currentTime + 0.08); }
+  if(type === 'hit'){ o.frequency.value = 120; g.gain.value = 0.06; o.start(); o.stop(audioCtx.currentTime + 0.18); }
+  if(type === 'start'){ o.frequency.value = 720; g.gain.value = 0.02; o.start(); o.stop(audioCtx.currentTime + 0.12); }
+}
+
+// Input handlers
+function jump(){
+  if(gameOver) return;
+  if(dino.grounded){
+    dino.vy = -14;
+    dino.grounded = false;
+    playSound('jump');
+  }
+}
+document.addEventListener('keydown', e => {
+  if(e.code === 'Space' || e.code === 'ArrowUp'){ e.preventDefault(); ensureAudioOnGesture(); jump(); }
+  if(e.code === 'KeyR'){ restart(); }
+});
+canvas.addEventListener('click', () => { ensureAudioOnGesture(); jump(); });
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); ensureAudioOnGesture(); jump(); }, {passive:false});
+
+// Game loop
+let last = 0;
+function loop(ts){
+  if(!last) last = ts;
+  const dt = Math.min(40, ts - last);
+  last = ts;
+  update(dt/16);
+  draw();
+  if(!gameOver) requestAnimationFrame(loop);
+}
+function start(){
+  if(running) return;
+  running = true; gameOver = false; score = 0; speed = 6;
+  obstacles = []; clouds = []; particles = [];
+  spawnTimer = 0; cloudTimer = 0;
+  dino.y = H - 70; dino.vy = 0; dino.grounded = true;
+  last = 0;
+  requestAnimationFrame(loop);
+}
+
+// Update logic
+function update(dt){
+  // physics
+  dino.vy += gravity * dt;
+  dino.y += dino.vy * dt;
+  const groundY = H - 70;
+  if(dino.y >= groundY){ dino.y = groundY; dino.vy = 0; dino.grounded = true; }
+
+  // spawn obstacles
+  spawnTimer -= dt;
+  if(spawnTimer <= 0){
+    spawnTimer = rand(40 - Math.min(30, score/50), 80 - Math.min(40, score/30));
+    const size = Math.random() < 0.6 ? rand(24,44) : rand(44,72);
+    obstacles.push({ x: W + 40, y: groundY + (70 - size), w: size*0.6, h: size, color: cssVar('--obstacle','#ff7b54') });
+  }
+
+  // clouds
+  cloudTimer -= dt;
+  if(cloudTimer <= 0){
+    cloudTimer = rand(60,140);
+    clouds.push({ x: W + 40, y: rand(30,120), w: rand(40,120), speed: rand(0.6,1.6) });
+  }
+
+  // move obstacles & clouds
+  for(let i=obstacles.length-1;i>=0;i--){
+    obstacles[i].x -= speed * dt;
+    if(obstacles[i].x + obstacles[i].w < -40) obstacles.splice(i,1);
+  }
+  for(let i=clouds.length-1;i>=0;i--){
+    clouds[i].x -= clouds[i].speed * dt;
+    if(clouds[i].x + clouds[i].w < -40) clouds.splice(i,1);
+  }
+
+  // collision
+  for(const ob of obstacles){
+    if(rectIntersect(dino.x, dino.y, dino.w, dino.h, ob.x, ob.y, ob.w, ob.h)){
+      endGame();
+      return;
+    }
+  }
+
+  // score & speed
+  score += 0.2 * dt;
+  speed = 6 + Math.min(12, Math.floor(score/50));
+  updateHUD();
+
+  // particles
+  for(let i=particles.length-1;i>=0;i--){
+    const p = particles[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 0.4 * dt;
+    p.life -= dt;
+    if(p.life <= 0) particles.splice(i,1);
+  }
+}
+
+// Draw
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // background
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0, cssVar('--bg-top','#ffecd2'));
+  g.addColorStop(1, cssVar('--bg-bottom','#fcb69f'));
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
+
+  // sun
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.shadowColor = 'rgba(255,255,255,0.12)';
+  ctx.shadowBlur = 40;
+  ctx.arc(W - 120, 60, 36, 0, Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // clouds
+  ctx.fillStyle = cssVar('--cloud','rgba(255,255,255,0.9)');
+  for(const c of clouds) roundRectFill(c.x, c.y, c.w, 28, 14);
+
+  // ground
+  ctx.fillStyle = cssVar('--ground','#2b2d42');
+  ctx.fillRect(0, H - 40, W, 40);
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  for(let i=0;i<W;i+=40) ctx.fillRect(i, H-36, 20, 4);
+
+  // obstacles
+  for(const ob of obstacles){
+    ctx.fillStyle = ob.color;
+    roundRectFill(ob.x, ob.y, ob.w, ob.h, 8);
+  }
+
+  // dino
+  ctx.fillStyle = cssVar('--dino','#06d6a0');
+  roundRectFill(dino.x, dino.y, dino.w, dino.h, 8);
+  ctx.fillStyle = '#08121a';
+  ctx.beginPath();
+  ctx.arc(dino.x + dino.w*0.7, dino.y + dino.h*0.3, 3, 0, Math.PI*2);
+  ctx.fill();
+
+  // particles
+  for(const p of particles){
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // overlay when game over
+  if(gameOver){
+    ctx.fillStyle = 'rgba(11,18,32,0.7)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 28px Inter, Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Game Over', W/2, H/2 - 10);
+    ctx.font = '16px Inter, Arial';
+    ctx.fillText('Klik Mulai Ulang untuk bermain lagi', W/2, H/2 + 20);
+  }
+}
+
+// helpers
+function rectIntersect(x1,y1,w1,h1,x2,y2,w2,h2){
+  return x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2;
+}
+function roundRectFill(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+  ctx.fill();
+}
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+// end game
+function endGame(){
+  gameOver = true; running = false;
+  playSound('hit');
+  lastScoreEl.textContent = Math.floor(score);
+  if(Math.floor(score) > best){ best = Math.floor(score); localStorage.setItem('dino_best', best); bestScoreEl.textContent = best; }
+  for(let i=0;i<40;i++){
+    particles.push({
+      x: dino.x + dino.w/2,
+      y: dino.y + dino.h/2,
+      vx: rand(-6,6), vy: rand(-10,-2), r: rand(2,6),
+      color: ['#ff6b6b','#ffd93d','#06d6a0','#7c3aed','#ff7b54'][Math.floor(rand(0,5))],
+      life: rand(40,80)
+    });
+  }
+  draw();
+}
+
+// HUD & controls
+function updateHUD(){ scoreEl.textContent = 'Skor ' + Math.floor(score); speedLabel.textContent = 'Kecepatan: ' + (6 + Math.min(12, Math.floor(score/50))); }
+function restart(){ start(); playSound('start'); }
+restartBtn.addEventListener('click', () => { ensureAudioOnGesture(); restart(); });
+toggleMusicBtn.addEventListener('click', () => { musicOn = !musicOn; toggleMusicBtn.textContent = musicOn ? 'Suara On' : 'Suara Off'; });
+
+// theme buttons
+document.querySelectorAll('[data-theme]').forEach(btn => btn.addEventListener('click', () => applyTheme(btn.getAttribute('data-theme'))));
+document.getElementById('randomTheme').addEventListener('click', () => { const keys = Object.keys(themes); applyTheme(keys[Math.floor(Math.random()*keys.length)]); });
+function applyTheme(name){
+  const t = themes[name]; if(!t) return;
+  for(const k in t) document.documentElement.style.setProperty(k, t[k]);
+}
+
+// start
+function init(){
+  resize();
+  dino.y = H - 70;
+  // start paused until user interacts (to satisfy audio gesture policies)
+  start();
+}
+init();
+
+</script>
+</body>
+</html>
