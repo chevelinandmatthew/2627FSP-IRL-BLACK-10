@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Festival Kue Bulan 2026 | 25 September 2026 | 中秋节</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Serif+SC:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==================== VARIABLE & RESET ==================== */
+    :root {
+      --bg-maroon-dark: #2b0408;
+      --bg-maroon-main: #4a0b12;
+      --bg-maroon-light: #6e131d;
+      --gold-primary: #f3ca6c;
+      --gold-bright: #ffea9f;
+      --gold-dark: #b8860b;
+      --text-light: #fff5e6;
+      --text-muted: #d9b89c;
+      --card-bg: rgba(74, 11, 18, 0.85);
+      --card-border: rgba(243, 202, 108, 0.4);
+      --shadow-gold: 0 0 25px rgba(243, 202, 108, 0.3);
+      --wa-green: #25D366;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #5c0d16 0%, #2b0408 65%, #170204 100%);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Lantern Particles */
+    .lantern-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .lantern {
+      position: absolute;
+      bottom: -60px;
+      color: rgba(255, 215, 0, 0.45);
+      font-size: 22px;
+      animation: floatUp 14s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(255, 234, 159, 0.6));
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.9;
+      }
+      85% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-115vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ==================== NAVBAR ==================== */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(43, 4, 8, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 100;
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold-primary);
+      text-decoration: none;
+    }
+
+    .logo span {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.2rem;
+      color: var(--gold-bright);
+    }
+
+    nav {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--gold-primary);
+      text-shadow: 0 0 8px var(--gold-primary);
+    }
+
+    .date-badge {
+      background: linear-gradient(135deg, #c0392b, #8e44ad);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--gold-primary);
+    }
+
+    /* ==================== HERO SECTION ==================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 110px 20px 60px;
+      z-index: 2;
+    }
+
+    .moon-glow {
+      position: absolute;
+      top: 12%;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, #fffdf0 0%, #ffe885 45%, #cca32d 80%, transparent 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 90px rgba(255, 232, 133, 0.7), 0 0 160px rgba(255, 215, 0, 0.35);
+      z-index: -1;
+      animation: moonPulse 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes moonPulse {
+      0% { transform: scale(1); box-shadow: 0 0 80px rgba(255, 232, 133, 0.6); }
+      100% { transform: scale(1.06); box-shadow: 0 0 120px rgba(255, 232, 133, 0.85); }
+    }
+
+    .hero-tag {
+      background: rgba(243, 202, 108, 0.15);
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-bright);
+      padding: 6px 18px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .hero-title-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 3.6rem;
+      color: var(--gold-bright);
+      margin-top: 20px;
+      text-shadow: 0 0 18px rgba(255, 234, 159, 0.6);
+      letter-spacing: 6px;
+    }
+
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.1rem;
+      background: linear-gradient(135deg, #ffffff 30%, var(--gold-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 10px 0 15px;
+      font-weight: 900;
+    }
+
+    .hero p {
+      max-width: 680px;
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 35px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+      color: #2b0408;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 18px rgba(243, 202, 108, 0.45);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(243, 202, 108, 0.8);
+    }
+
+    .btn-wa-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 18px rgba(37, 211, 102, 0.4);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .btn-wa-hero:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(37, 211, 102, 0.7);
+    }
+
+    /* ==================== CONTAINER & SECTIONS ==================== */
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 90px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 55px;
+    }
+
+    .section-header h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.3rem;
+      color: var(--gold-primary);
+      margin-bottom: 8px;
+    }
+
+    .section-header .sub-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.35rem;
+      color: var(--gold-bright);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .divider {
+      width: 90px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      margin: 15px auto 0;
+    }
+
+    /* ==================== LEGENDA SECTION ==================== */
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 30px;
+    }
+
+    .legend-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .legend-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      border-radius: 16px 16px 0 0;
+      background: linear-gradient(90deg, var(--gold-primary), transparent);
+    }
+
+    .legend-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .legend-icon {
+      font-size: 2.6rem;
+      color: var(--gold-primary);
+      margin-bottom: 15px;
+    }
+
+    .legend-card h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-bright);
+      font-size: 1.35rem;
+      margin-bottom: 5px;
+    }
+
+    .legend-card .cn-title {
+      font-family: 'Noto Serif SC', serif;
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .legend-card p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* ==================== UCAPAN & WA SECTION ==================== */
+    .wishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .wish-card {
+      background: rgba(110, 19, 29, 0.45);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .wish-card:hover {
+      background: rgba(110, 19, 29, 0.8);
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .wish-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.55rem;
+      color: var(--gold-bright);
+      margin-bottom: 6px;
+    }
+
+    .wish-pinyin {
+      font-size: 0.85rem;
+      color: var(--gold-primary);
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    .wish-id {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .wish-en {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .btn-wa-card {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-wa-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.6);
+    }
+
+    /* Custom WA Generator Box */
+    .wa-generator-box {
+      background: var(--card-bg);
+      border: 1px solid var(--gold-primary);
+      border-radius: 20px;
+      padding: 35px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-gold);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .wa-generator-box h3 {
+      font-family: 'Cinzel', serif;
+      color: var(--gold-bright);
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .wa-generator-box p {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--gold-primary);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 10px rgba(243, 202, 108, 0.3);
+    }
+
+    /* ==================== LOMBA 25 SEPT SECTION ==================== */
+    .competition-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .comp-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .comp-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--gold-primary);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .comp-header {
+      background: linear-gradient(135deg, rgba(110, 19, 29, 0.9), rgba(43, 4, 8, 0.9));
+      padding: 20px 25px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .comp-icon {
+      font-size: 2.2rem;
+      color: var(--gold-bright);
+    }
+
+    .comp-title h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.25rem;
+      color: var(--gold-bright);
+    }
+
+    .comp-title .badge-date {
+      font-size: 0.75rem;
+      color: #2b0408;
+      background: var(--gold-primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .comp-body {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .comp-details {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .comp-details li {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .comp-details i {
+      color: var(--gold-primary);
+      margin-top: 3px;
+    }
+
+    .comp-prize {
+      background: rgba(243, 202, 108, 0.1);
+      border: 1px dashed var(--gold-primary);
+      padding: 10px 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: var(--gold-bright);
+      font-weight: 600;
+    }
+
+    /* ==================== QUIZ SECTION ==================== */
+    .quiz-wrapper {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 780px;
+      margin: 0 auto;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .quiz-question {
+      font-size: 1.25rem;
+      color: var(--gold-bright);
+      margin-bottom: 25px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(243, 202, 108, 0.25);
+      padding: 14px 20px;
+      border-radius: 12px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .option-btn:hover {
+      background: rgba(243, 202, 108, 0.18);
+      border-color: var(--gold-primary);
+    }
+
+    .option-btn.correct {
+      background: rgba(46, 125, 50, 0.85) !important;
+      border-color: #4caf50 !important;
+      color: #fff;
+    }
+
+    .option-btn.wrong {
+      background: rgba(198, 40, 40, 0.85) !important;
+      border-color: #f44336 !important;
+      color: #fff;
+    }
+
+    .quiz-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .score-badge {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    #next-btn {
+      background: var(--gold-primary);
+      color: #2b0408;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: none;
+    }
+
+    #quiz-result {
+      text-align: center;
+      display: none;
+    }
+
+    #quiz-result h3 {
+      font-size: 1.9rem;
+      color: var(--gold-bright);
+      margin-bottom: 15px;
+    }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      background: #1a0205;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 35px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer .footer-cn {
+      font-family: 'Noto Serif SC', serif;
+      color: var(--gold-primary);
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+      nav a {
+        display: none;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero-title-cn {
+        font-size: 2.6rem;
+      }
+      .quiz-wrapper, .wa-generator-box {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Lantern Background Particles -->
+  <div class="lantern-container" id="lanternContainer"></div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <a href="#" class="logo">
+      <i class="fa-solid fa-moon"></i>
+      <span>中秋 Mooncake 2026</span>
+    </a>
+    <nav>
+      <a href="#legenda"><i class="fa-solid fa-book-open"></i> Legenda</a>
+      <a href="#ucapan"><i class="fa-solid fa-paper-plane"></i> Ucapan WA</a>
+      <a href="#lomba"><i class="fa-solid fa-trophy"></i> Lomba 25 Sept</a>
+      <a href="#kuis"><i class="fa-solid fa-gamepad"></i> Kuis</a>
+      <span class="date-badge"><i class="fa-regular fa-calendar"></i> 25 Sept 2026</span>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="moon-glow"></div>
+    <div class="hero-tag"><i class="fa-solid fa-sparkles"></i> Perayaan Puncak: Jumat, 25 September 2026</div>
+    <div class="hero-title-cn">花好月圆 · 中秋佳节</div>
+    <h1>Festival Kue Bulan 2026</h1>
+    <p>Selamat Merayakan Mid-Autumn Festival 2026! Momen kehangatan berkumpul bersama keluarga di bawah sinar bulan purnama, menikmati manisnya kue bulan, dan berbagi kebahagiaan.</p>
+    
+    <div class="hero-buttons">
+      <a href="#ucapan" class="btn-wa-hero"><i class="fa-brands fa-whatsapp"></i> Kirim Ucapan ke WA</a>
+      <a href="#lomba" class="btn-gold"><i class="fa-solid fa-award"></i> Lihat Lomba 25 Sept</a>
+    </div>
+  </section>
+
+  <!-- Legenda Section -->
+  <section class="container" id="legenda">
+    <div class="section-header">
+      <span class="sub-cn">中秋传说与故事</span>
+      <h2>Legenda & Sejarah Kue Bulan</h2>
+      <p style="color: var(--text-muted);">Kisah legendaris di balik keanggunan Mid-Autumn Festival</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="legend-grid">
+      <!-- Card 1 -->
+      <div class="legend-card">
+        <div class="legend-icon"><i class="fa-solid fa-person-falling-burst"></i></div>
+        <h3>Dewi Bulan Chang'e</h3>
+        <span class="cn-title">嫦娥奔月 (Cháng'é Bēn Yuè)</span>
+        <p>
+          Hou Yi memanah 9 dari 10 matahari yang membakar bumi. Sebagai imbalan, ia mendapatkan ramuan keabadian. Demi melindungi ramuan tersebut dari niat jahat, Chang'e meminumnya lalu membumi melayang menuju Istana Bulan (广寒宫), menjadi Dewi Bulan yang senantiasa dipuja saat purnama.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="legend-card">
+        <div class="legend-icon"><i class="fa-solid fa-bounce"></i></div>
+        <h3>Kelinci Giok di Bulan</h3>
+        <span class="cn-title">玉兔捣药 (Yùtù Dǎo Yào)</span>
+        <p>
+          Seekor kelinci mengorbankan dirinya demi membantu dewa penyamar. Atas ketulusannya, kelinci ini diangkat ke bulan untuk menemani Dewi Chang'e dan bertugas menumbuk ramuan herbal keabadian dengan alu gioknya.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="legend-card">
+        <div class="legend-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+        <h3>Pesan Rahasia Dinasti Ming</h3>
+        <span class="cn-title">月饼起义 (Yuèbǐng Qǐyì)</span>
+        <p>
+          Pada akhir Dinasti Yuan, para pejuang menyelipkan gulungan surat rahasia bertuliskan *"Pemberontakan Malam Ini"* di dalam kue bulan. Strategi pembagian kue bulan saat puncak purnama berhasil menyatukan rakyat untuk meraih kemerdekaan.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ucapan & WhatsApp Direct Section -->
+  <section class="container" id="ucapan">
+    <div class="section-header">
+      <span class="sub-cn">中秋祝福语 · 直发微信 / WA</span>
+      <h2>Ucapan Doa & Kirim WhatsApp</h2>
+      <p style="color: var(--text-muted);">Pilih ucapan favorit Anda dan bagikan langsung ke keluarga & sahabat via WhatsApp!</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="wishes-grid">
+      <!-- Card 1 -->
+      <div class="wish-card">
+        <div>
+          <div class="wish-cn">花好月圆，人团圆</div>
+          <div class="wish-pinyin">Huā hǎo yuè yuán, rén tuányuán</div>
+          <div class="wish-id">"Bunga bermekaran indah, bulan purnama sempurna, semoga keluarga kita selalu berkumpul dalam kehangatan dan kebahagiaan."</div>
+          <div class="wish-en">"May the flowers bloom, the moon be full, and our family reunited in perfect harmony."</div>
+        </div>
+        <button class="btn-wa-card" onclick="shareWishToWA('花好月圆，人团圆 (Huā hǎo yuè yuán, rén tuányuán)\n\nBunga bermekaran indah, bulan purnama sempurna, semoga keluarga kita selalu berkumpul dalam kehangatan dan kebahagiaan. 🥮🌕✨')">
+          <i class="fa-brands fa-whatsapp"></i> Kirim ke WhatsApp
+        </button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="wish-card">
+        <div>
+          <div class="wish-cn">祝您中秋快乐，合家幸福！</div>
+          <div class="wish-pinyin">Zhù nín zhōngqiū kuàilè, héjiā xìngfú!</div>
+          <div class="wish-id">"Selamat Hari Raya Festival Kue Bulan 2026! Semoga Anda dan keluarga dilimpahkan kesehatan, rezeki, dan kebahagiaan."</div>
+          <div class="wish-en">"Happy Mid-Autumn Festival 2026! Wishing your family joy, prosperity, and good health."</div>
+        </div>
+        <button class="btn-wa-card" onclick="shareWishToWA('祝您中秋快乐，合家幸福！(Zhù nín zhōngqiū kuàilè, héjiā xìngfú!)\n\nSelamat Hari Raya Festival Kue Bulan 2026! Semoga Anda dan keluarga dilimpahkan kesehatan, rezeki, dan kebahagiaan. 🥮🌕')">
+          <i class="fa-brands fa-whatsapp"></i> Kirim ke WhatsApp
+        </button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="wish-card">
+        <div>
+          <div class="wish-cn">海上生明月，天涯共此时</div>
+          <div class="wish-pinyin">Hǎishàng shēng míngyuè, tiānyá gòng cǐshí</div>
+          <div class="wish-id">"Bulan terang terbit di atas lautan; meskipun terpisah jarak dan benua, kita menikmati keindahan bulan purnama yang sama."</div>
+          <div class="wish-en">"As the bright moon rises over the sea, we share this precious moment together despite the distance."</div>
+        </div>
+        <button class="btn-wa-card" onclick="shareWishToWA('海上生明月，天涯共此时 (Hǎishàng shēng míngyuè, tiānyá gòng cǐshí)\n\nBulan terang terbit di atas lautan; meskipun terpisah jarak, kita menikmati keindahan bulan purnama yang sama. 🌕❤️✨')">
+          <i class="fa-brands fa-whatsapp"></i> Kirim ke WhatsApp
+        </button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="wish-card">
+        <div>
+          <div class="wish-cn">愿你的生活像月饼一样甜甜蜜蜜</div>
+          <div class="wish-pinyin">Yuàn nǐ de shēnghuó xiàng yuèbǐng yīyàng tián tiánmì mì</div>
+          <div class="wish-id">"Semoga kehidupanmu senantiasa manis, hangat, dan penuh rasa syukur layaknya kelezatan kue bulan."</div>
+          <div class="wish-en">"May your life be as sweet, warm, and fulfilling as a traditional mooncake."</div>
+        </div>
+        <button class="btn-wa-card" onclick="shareWishToWA('愿你的生活像月饼一样甜甜蜜蜜 (Yuàn nǐ de shēnghuó xiàng yuèbǐng yīyàng tián tiánmì mì)\n\nSemoga kehidupanmu senantiasa manis, hangat, dan penuh kebahagiaan layaknya kelezatan kue bulan. 🥮😋✨')">
+          <i class="fa-brands fa-whatsapp"></i> Kirim ke WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Generator Pesan WA Custom -->
+    <div class="wa-generator-box">
+      <h3><i class="fa-brands fa-whatsapp" style="color: var(--wa-green);"></i> Pembuat Kartu Ucapan WA Personal</h3>
+      <p>Ketik nama penerima dan pilih kalimat ucapan untuk membuat pesan kustom WhatsApp!</p>
+
+      <div class="form-group">
+        <label for="wa-name">Nama Penerima / Panggilan:</label>
+        <input type="text" id="wa-name" class="form-control" placeholder="Contoh: Mama, Papa, Chen Wei, Sahabatku...">
+      </div>
+
+      <div class="form-group">
+        <label for="wa-select-wish">Pilih Tema Ucapan:</label>
+        <select id="wa-select-wish" class="form-control">
+          <option value="Semoga kehangatan kebersamaan & kebahagiaan senantiasa menyertai langkahmu di Festival Kue Bulan 2026 ini!">Keluarga & Kebersamaan (团圆)</option>
+          <option value="Semoga rezeki makin berlimpah, karir melesat tinggi, dan kesehatan selalu terjaga di malam Mooncake Festival!">Kesuksesan & Rezeki (事业与健康)</option>
+          <option value="Walaupun kita berada di tempat yang berbeda, kenangan manis dan persahabatan kita tetap bersinar layaknya bulan purnama!">Persahabatan Berharga (友谊长存)</option>
+        </select>
+      </div>
+
+      <div style="text-align: center; margin-top: 25px;">
+        <button class="btn-wa-card" style="font-size: 1rem; padding: 12px 30px;" onclick="generateCustomWA()">
+          <i class="fa-brands fa-whatsapp"></i> Buat & Kirim Pesan WA Sekarang
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOMBA MOONCAKE FESTIVAL 25 SEPT 2026 -->
+  <section class="container" id="lomba">
+    <div class="section-header">
+      <span class="sub-cn">2026年中秋节 Highlight 比赛项目</span>
+      <h2>Lomba & Agenda Spesial (25 Sept 2026)</h2>
+      <p style="color: var(--text-muted);">Saksikan & Ikuti Kompetisi Meriah Festival Kue Bulan pada puncak perayaan Jumat, 25 September 2026!</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="competition-grid">
+      <!-- Lomba 1 -->
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-icon"><i class="fa-solid fa-cookie-bite"></i></div>
+          <div class="comp-title">
+            <h3>Lomba Kreasi Mooncake</h3>
+            <span class="badge-date"><i class="fa-regular fa-calendar"></i> 25 Sept 2026</span>
+          </div>
+        </div>
+        <div class="comp-body">
+          <ul class="comp-details">
+            <li><i class="fa-solid fa-check"></i> <strong>Kategori:</strong> Tradisional (Lotus/Egg Yolk) & Modern Snowskin.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kriteria:</strong> Keharmonisan rasa, tekstur, keindahan ukiran cetakan, & estetika kemasan.</li>
+            <li><i class="fa-solid fa-location-dot"></i> <strong>Lokasi:</strong> Main Atrium Culinary Plaza.</li>
+          </ul>
+          <div class="comp-prize">
+            🏆 DAPATKAN HADIAH YANG MENARIK
+          </div>
+          <button class="btn-gold" style="width: 100%; justify-content: center;" onclick="alert('Pendaftaran Lomba Kreasi Mooncake 2026 dibuka hingga 20 September 2026!')">
+            <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba
+          </button>
+        </div>
+      </div>
+
+      <!-- Lomba 2 -->
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-icon"><i class="fa-solid fa-lightbulb"></i></div>
+          <div class="comp-title">
+            <h3>Lomba Desain Lampion Hias</h3>
+            <span class="badge-date"><i class="fa-regular fa-calendar"></i> 25 Sept 2026</span>
+          </div>
+        </div>
+        <div class="comp-body">
+          <ul class="comp-details">
+            <li><i class="fa-solid fa-check"></i> <strong>Kategori:</strong> Lampion Kertas Tradisional & Lampion Daur Ulang Ramah Lingkungan.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kriteria:</strong> Pencahayaan, detail lukisan, keaslian bahan, & tema legenda bulan.</li>
+            <li><i class="fa-solid fa-location-dot"></i> <strong>Lokasi:</strong> Heritage Lantern Park.</li>
+          </ul>
+          <div class="comp-prize">
+            🏮 DAPATKAN HADIAH YANG MENARIK
+          </div>
+          <button class="btn-gold" style="width: 100%; justify-content: center;" onclick="alert('Pendaftaran Lomba Lampion Hias dibuka hingga 22 September 2026!')">
+            <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba
+          </button>
+        </div>
+      </div>
+
+      <!-- Lomba 3 -->
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-icon"><i class="fa-solid fa-user-ninja"></i></div>
+          <div class="comp-title">
+            <h3>Cosplay Hanfu & Dewi Chang'e</h3>
+            <span class="badge-date"><i class="fa-regular fa-calendar"></i> 25 Sept 2026</span>
+          </div>
+        </div>
+        <div class="comp-body">
+          <ul class="comp-details">
+            <li><i class="fa-solid fa-check"></i> <strong>Kategori:</strong> Busana Tradisional Hanfu, Dewi Chang'e, Hou Yi, & Kelinci Giok.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kriteria:</strong> Kemiripan karakter, catwalk peragaan busana, & gestur kebudayaan.</li>
+            <li><i class="fa-solid fa-location-dot"></i> <strong>Lokasi:</strong> Grand Stage Cultural Center.</li>
+          </ul>
+          <div class="comp-prize">
+            👑 DAPATKAN HADIAH YANG MENARIK
+          </div>
+          <button class="btn-gold" style="width: 100%; justify-content: center;" onclick="alert('Pendaftaran Lomba Cosplay Hanfu & Chang\'e dibuka hingga 23 September 2026!')">
+            <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba
+          </button>
+        </div>
+      </div>
+
+      <!-- Lomba 4 -->
+      <div class="comp-card">
+        <div class="comp-header">
+          <div class="comp-icon"><i class="fa-solid fa-pen-nib"></i></div>
+          <div class="comp-title">
+            <h3>Lomba Kaligrafi Mandarin (书法)</h3>
+            <span class="badge-date"><i class="fa-regular fa-calendar"></i> 25 Sept 2026</span>
+          </div>
+        </div>
+        <div class="comp-body">
+          <ul class="comp-details">
+            <li><i class="fa-solid fa-check"></i> <strong>Kategori:</strong> Seni Kuas Tinta Hitam / Shūfǎ Tema Syair Bulan (水墨中秋).</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kriteria:</strong> Keindahan coretan kuas, proporsi karakter, & kedalaman estetika.</li>
+            <li><i class="fa-solid fa-location-dot"></i> <strong>Lokasi:</strong> Arts & Cultural Pavilion.</li>
+          </ul>
+          <div class="comp-prize">
+            🖌️ DAPATKAN HADIAH YANG MENARIK
+          </div>
+          <button class="btn-gold" style="width: 100%; justify-content: center;" onclick="alert('Pendaftaran Lomba Kaligrafi Mandarin dibuka hingga 21 September 2026!')">
+            <i class="fa-solid fa-pen-to-square"></i> Daftar Lomba
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Quiz Section -->
+  <section class="container" id="kuis">
+    <div class="section-header">
+      <span class="sub-cn">中秋知识小测验</span>
+      <h2>Kuis Mid-Autumn Festival</h2>
+      <p style="color: var(--text-muted);">Uji pengetahuanmu seputar sejarah, legenda, dan tradisi kue bulan!</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="quiz-wrapper">
+      <div id="quiz-body">
+        <div class="quiz-question" id="quiz-question">Loading Question...</div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-controls">
+          <span class="score-badge" id="quiz-progress">Pertanyaan 1 dari 7</span>
+          <button id="next-btn" onclick="nextQuestion()">Lanjut <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <div id="quiz-result">
+        <i class="fa-solid fa-trophy" style="font-size: 3.5rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+        <h3>Hasil Kuis Anda</h3>
+        <p id="score-text" style="font-size: 1.2rem; margin-bottom: 25px; color: var(--text-light);"></p>
+        <button class="btn-gold" onclick="restartQuiz()"><i class="fa-solid fa-rotate-right"></i> Coba Kuis Lagi</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-cn">愿明月常陪伴，千里共婵娟</div>
+    <p>Mid-Autumn Mooncake Festival 2026 • 25 September 2026 • Selamat Hari Raya Kue Bulan</p>
+    <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">© 2026 Premium Maroon Edition. Created with Love & Elegance.</p>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    /* Floating Lantern Generator */
+    function createLanterns() {
+      const container = document.getElementById('lanternContainer');
+      const count = 16;
+      for (let i = 0; i < count; i++) {
+        const lantern = document.createElement('i');
+        lantern.className = 'fa-solid fa-lightbulb lantern';
+        lantern.style.left = Math.random() * 100 + '%';
+        lantern.style.animationDuration = (7 + Math.random() * 9) + 's';
+        lantern.style.animationDelay = (Math.random() * 5) + 's';
+        lantern.style.fontSize = (16 + Math.random() * 20) + 'px';
+        container.appendChild(lantern);
+      }
+    }
+    createLanterns();
+
+    /* WhatsApp Direct Share Function */
+    function shareWishToWA(message) {
+      const encodedMsg = encodeURIComponent(message);
+      const waUrl = `https://api.whatsapp.com/send?text=${encodedMsg}`;
+      window.open(waUrl, '_blank');
+    }
+
+    /* Generator Custom WA */
+    function generateCustomWA() {
+      const recipient = document.getElementById('wa-name').value.trim() || 'Sahabatku';
+      const wishText = document.getElementById('wa-select-wish').value;
+      
+      const fullMessage = `Halo ${recipient}! 🥮✨\n\nSelamat Hari Raya Festival Kue Bulan 2026 (Mid-Autumn Festival - 25 September 2026)!\n\n"中秋快乐，合家幸福！"\n${wishText}\n\nSemoga sinar bulan purnama membawa kedamaian & berkah untuk kita sekeluarga! 🌕🎏❤️`;
+      
+      shareWishToWA(fullMessage);
+    }
+
+    /* Quiz Data */
+    const quizData = [
+      {
+        question: "Kue bulan merupakan penganan khas yang disajikan saat merayakan festival apa?",
+        options: [
+          "Imlek (Tahun Baru Tionghoa)",
+          "Festival Peh Cun",
+          "Festival Pertengahan Musim Gugur (Mid-Autumn Festival)",
+          "Festival Cap Go Meh"
+        ],
+        correct: 2
+      },
+      {
+        question: "Bentuk bulat pada kue bulan secara umum melambangkan apa?",
+        options: [
+          "Kekayaan dan kelimpahan rezeki",
+          "Kebijaksanaan dan umur panjang",
+          "Reuni, keutuhan keluarga, dan kesempurnaan",
+          "Kemenangan dalam peperangan"
+        ],
+        correct: 2
+      },
+      {
+        question: "Kuning telur asin utuh yang sering ditemukan di tengah kue bulan melambangkan...",
+        options: [
+          "Matahari terbit",
+          "Bulan purnama",
+          "Emas murni",
+          "Mutiara keberuntungan"
+        ],
+        correct: 1
+      },
+      {
+        question: "Dalam sejarah Tiongkok pada akhir Dinasti Yuan, kue bulan pernah dimanfaatkan untuk...",
+        options: [
+          "Menyimpan resep rahasia kerajaan",
+          "Menyembunyikan pesan rahasia rencana pemberontakan",
+          "Racun untuk pasukan musuh",
+          "Alat tukar mata uang darurat"
+        ],
+        correct: 1
+      },
+      {
+        question: "Isian (filling) tradisional yang paling klasik pada kue bulan otentik adalah...",
+        options: [
+          "Cokelat dan keju",
+          "Pasta biji teratai (lotus seed paste) atau pasta kacang merah",
+          "Selai nanas",
+          "Daging cincang pedas"
+        ],
+        correct: 1
+      },
+      {
+        question: "Siapakah nama Dewi Bulan dalam legenda utama Mid-Autumn Festival?",
+        options: [
+          "Nuwa (女娲)",
+          "Chang'e (嫦娥)",
+          "Mulan (木兰)",
+          "Guanyin (观音)"
+        ],
+        correct: 1
+      },
+      {
+        question: "Hewan apakah yang setia mendampingi Dewi Bulan di Istana Bulan?",
+        options: [
+          "Kelinci Giok (玉兔)",
+          "Naga Emas (金龙)",
+          "Burung Phoenix (凤凰)",
+          "Kura-kura Suci (神龟)"
+        ],
+        correct: 0
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuiz() {
+      answered = false;
+      document.getElementById('next-btn').style.display = 'none';
+      const q = quizData[currentQ];
+      document.getElementById('quiz-question').innerText = `${currentQ + 1}. ${q.question}`;
+      document.getElementById('quiz-progress').innerText = `Pertanyaan ${currentQ + 1} dari ${quizData.length}`;
+
+      const optionsContainer = document.getElementById('quiz-options');
+      optionsContainer.innerHTML = '';
+
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(btn, index);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedBtn, index) {
+      if (answered) return;
+      answered = true;
+
+      const q = quizData[currentQ];
+      const buttons = document.querySelectorAll('.option-btn');
+
+      if (index === q.correct) {
+        selectedBtn.classList.add('correct');
+        score++;
+      } else {
+        selectedBtn.classList.add('wrong');
+        buttons[q.correct].classList.add('correct');
+      }
+
+      document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < quizData.length) {
+        loadQuiz();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz-body').style.display = 'none';
+      const resultDiv = document.getElementById('quiz-result');
+      resultDiv.style.display = 'block';
+      document.getElementById('score-text').innerText = `Hebat! Anda berhasil menjawab benar ${score} dari ${quizData.length} pertanyaan! 🎉🥮`;
+    }
+
+    function restartQuiz() {
+      currentQ = 0;
+      score = 0;
+      document.getElementById('quiz-body').style.display = 'block';
+      document.getElementById('quiz-result').style.display = 'none';
+      loadQuiz();
+    }
+
+    // Initialize Quiz
+    loadQuiz();
+  </script>
+</body>
+</html>
