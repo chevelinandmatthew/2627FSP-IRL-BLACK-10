@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MONOLITH. — Game Shooter & Developer Portfolio</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* TEMA WARNA & TAMPILAN NEO-BRUTALISM */
+    :root {
+      --bg-main: #FFFDF0;           
+      --bg-stage: #FFF9C4;          
+      --ink-primary: #121212;       
+      --ink-secondary: #4A4A4A;     
+      --ink-muted: #71717A;
+      
+      --yellow-pop: #FFE600;        
+      --purple-accent: #8B5CF6;     
+      --pink-accent: #FF6B9D;       
+
+      --border-black: 2.5px solid #121212;
+      --shadow-hard: 4px 4px 0px #121212;
+      --shadow-hover: 7px 7px 0px #121212;
+
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background-color: var(--bg-main);
+      color: var(--ink-primary);
+      font-family: var(--font-body);
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* KELAS UTILITAS TEKS & ELEMEN */
+    .mono-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--purple-accent);
+      background: rgba(139, 92, 246, 0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    .display-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* TOMBOL STYLISH */
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: var(--border-black);
+      background: #FFFFFF;
+      color: var(--ink-primary);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-hard);
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--shadow-hover);
+      background-color: var(--yellow-pop);
+    }
+
+    .pill-btn.pill-accent {
+      background-color: var(--yellow-pop);
+    }
+
+    .pill-btn.pill-accent:hover {
+      background-color: var(--purple-accent);
+      color: #FFFFFF;
+    }
+
+    /* NAVBAR */
+    .nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 68px;
+      z-index: 1000;
+      background-color: var(--yellow-pop);
+      border-bottom: var(--border-black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4vw;
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--ink-primary);
+      text-decoration: none;
+      background: #FFFFFF;
+      padding: 4px 12px;
+      border: var(--border-black);
+      border-radius: 8px;
+      box-shadow: 3px 3px 0px #121212;
+    }
+
+    .nav-brand span { color: var(--purple-accent); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-link a {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ink-primary);
+      text-decoration: none;
+    }
+
+    .nav-link a:hover { color: var(--purple-accent); }
+
+    /* HERO SECTION */
+    .hero-section {
+      position: relative;
+      min-height: 85vh;
+      margin-top: 68px;
+      background-color: var(--bg-stage);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 6vh 4vw 4vh 4vw;
+      border-bottom: var(--border-black);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 50vw) 1fr;
+      gap: 2rem;
+      z-index: 10;
+      align-items: center;
+    }
+
+    .hero-headline {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(32px, 4.5vw, 62px);
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin: 1rem 0;
+      color: var(--ink-primary);
+    }
+
+    .hero-headline span.accent {
+      background-color: var(--yellow-pop);
+      padding: 0 8px;
+      border: var(--border-black);
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    /* CREATOR & CV SECTION */
+    .creator-section {
+      background-color: var(--bg-stage);
+      padding: 80px 4vw;
+      border-bottom: var(--border-black);
+    }
+
+    .creator-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3vw;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    .creator-card {
+      background: #FFFFFF;
+      border: var(--border-black);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow-hard);
+    }
+
+    .creator-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+    }
+
+    .creator-details h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      color: var(--purple-accent);
+    }
+
+    .creator-list {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .creator-list li {
+      padding: 8px 0;
+      border-bottom: 1px dashed #DDD;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* GAME SECTION */
+    .game-section {
+      background-color: var(--bg-main);
+      padding: 80px 4vw;
+      border-bottom: var(--border-black);
+      text-align: center;
+    }
+
+    .game-container {
+      margin-top: 2rem;
+      background: #FFFFFF;
+      border: var(--border-black);
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: var(--shadow-hard);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .game-iframe {
+      width: 100%;
+      height: 550px;
+      border: var(--border-black);
+      border-radius: 12px;
+      background-color: #000;
+    }
+
+    /* PROOF SECTION */
+    .proof-section {
+      background-color: var(--ink-primary);
+      color: #FFFFFF;
+      padding: 80px 4vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4vw;
+      align-items: center;
+      border-bottom: var(--border-black);
+    }
+
+    .proof-number {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 90px);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      margin: 1rem 0 0.5rem 0;
+      color: var(--yellow-pop);
+    }
+
+    /* DIAGRAM SECTION */
+    .diagram-section {
+      background-color: var(--bg-main);
+      padding: 80px 4vw;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4vw;
+    }
+
+    .def-list {
+      margin-top: 1.8rem;
+      border-bottom: var(--border-black);
+    }
+
+    .def-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 120px;
+      padding: 14px 10px;
+      border-top: var(--border-black);
+      font-size: 13px;
+      border-radius: 8px;
+    }
+
+    .def-row:hover { background-color: var(--yellow-pop); }
+
+    /* FOOTER */
+    footer {
+      padding: 30px 4vw;
+      background: var(--ink-primary);
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 800px) {
+      .hero-grid, .creator-grid, .proof-section, .diagram-section {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+      .game-iframe { height: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav-bar">
+    <a href="#" class="nav-brand">MONOLITH<span>.</span></a>
+    
+    <ul class="nav-links">
+      <li class="nav-link"><a href="#creator">Creator Profile</a></li>
+      <li class="nav-link"><a href="#game">Shooter Game</a></li>
+      <li class="nav-link"><a href="#proof">Game Stats</a></li>
+      <li class="nav-link"><a href="#diagram">System Diagram</a></li>
+    </ul>
+
+    <a href="#game" class="pill-btn pill-accent">Mainkan Game</a>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-grid">
+      <div>
+        <span class="mono-meta">OFFICIAL GAME PLATFORM // v4.0</span>
+        <h1 class="hero-headline">
+          PROJECT <br>
+          <span class="accent">SHOOTER GAME</span>
+        </h1>
+        <p style="font-size: 14px; line-height: 1.6; color: var(--ink-secondary); margin-bottom: 1.8rem;">
+          Platform interaktif web ciptaan Chevelin Angel. Menampilkan proyek game shooter berkecepatan tinggi dengan integrasi sistem real-time.
+        </p>
+        <div style="display: flex; gap: 1rem;">
+          <a href="#game" class="pill-btn pill-accent">Mainkan Game</a>
+          <a href="#creator" class="pill-btn">Profil Developer</a>
+        </div>
+      </div>
+
+      <svg width="100%" height="280" viewBox="0 0 500 380" fill="none">
+        <rect x="50" y="40" width="400" height="300" rx="24" fill="#FFFFFF" stroke="#121212" stroke-width="4"/>
+        <rect x="70" y="60" width="360" height="260" rx="16" fill="#FFE600" stroke="#121212" stroke-width="3"/>
+        <circle cx="250" cy="190" r="75" fill="#FFFFFF" stroke="#121212" stroke-width="3"/>
+        <circle cx="250" cy="190" r="35" fill="#8B5CF6" stroke="#121212" stroke-width="3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- SECTION PROFIL CREATOR / PEMILIK WEB (CV CHEVELIN ANGEL) -->
+  <section id="creator" class="creator-section">
+    <span class="mono-meta">01 // WEBSITE CREATOR & DEVELOPER</span>
+    <h2 class="display-title" style="font-size: clamp(26px, 3.5vw, 44px); margin-top: 0.8rem;">
+      PROFIL PEMILIK WEB
+    </h2>
+
+    <div class="creator-grid">
+      <!-- BIODATA KARTU KIRI -->
+      <div class="creator-card">
+        <span class="mono-meta" style="background: var(--yellow-pop); color: #121212;">LEAD DEVELOPER</span>
+        <h2 class="creator-title">CHEVELIN ANGEL</h2>
+        <p style="font-size: 13px; color: var(--ink-secondary); margin-bottom: 1rem;">
+          SMA BPK PENABUR Holis | High School Student
+        </p>
+        
+        <ul class="creator-list">
+          <li><span>Telepon:</span> <strong>+62 821 3052 2336</strong></li>
+          <li><span>Instagram:</span> <strong>@chevelinn_</strong></li>
+          <li><span>Alamat:</span> <strong>TKI 2 BLOK C4 NO 54</strong></li>
+          <li><span>Bahasa:</span> <strong>English (Inter), Mandarin (Adv)</strong></li>
+        </ul>
+
+        <a href="#game" class="pill-btn pill-accent" style="width: 100%;">Coba Game Buatan Saya ↗</a>
+      </div>
+
+      <!-- KARTU KANAN: PENDIDIKAN, PRESTASI, SKILLS -->
+      <div class="creator-card creator-details">
+        <h3>Riwayat Pendidikan & Prestasi (Education & Achievements)</h3>
+        <ul class="creator-list">
+          <li><span>SMA BPK PENABUR Holis:</span> <strong>Siswa Aktif</strong></li>
+          <li><span>SMPK Bina Bakti 3:</span> <strong>Juara 1 & Juara Umum Berturut-turut</strong></li>
+          <li><span>Organisasi OSIS:</span> <strong>Sekretaris OSIS KAIROS (2024–2026)</strong></li>
+          <li><span>Lomba Menyanyi Mandarin:</span> <strong>Juara 1 & Juara 3</strong></li>
+          <li><span>Kepanitiaan & Sains:</span> <strong>Panitia PORAK/PERAK & Peserta OSN IPA (2025)</strong></li>
+        </ul>
+
+        <h3 style="margin-top: 1.5rem;">Keahlian (Skills)</h3>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span class="mono-meta">Public Speaking</span>
+          <span class="mono-meta">Kerja Tim</span>
+          <span class="mono-meta">Manajemen Waktu</span>
+          <span class="mono-meta">Adaptasi</span>
+          <span class="mono-meta">Bernyanyi</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION GAME SHOOTER -->
+  <section id="game" class="game-section">
+    <span class="mono-meta">02 // INTERAKTIF MODUL</span>
+    <h2 class="display-title" style="font-size: clamp(26px, 3.5vw, 44px); margin-top: 0.8rem;">
+      SHOOTER GAME
+    </h2>
+
+    <div class="game-container">
+      <iframe 
+        class="game-iframe" 
+        src="https://chevelinandmatthew.github.io/2627FSP-IRL-BLACK-10/shootergame.html" 
+        title="Shooter Game"
+        allowfullscreen>
+      </iframe>
+
+      <div style="margin-top: 1rem;">
+        <a href="https://chevelinandmatthew.github.io/2627FSP-IRL-BLACK-10/shootergame.html" target="_blank" class="pill-btn pill-accent">
+          Buka Game Layar Penuh ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION PROOF (PERFORMANCE STATS GAME) -->
+  <section id="proof" class="proof-section">
+    <div>
+      <span class="mono-meta" style="background: rgba(255,230,0,0.2); color: var(--yellow-pop);">03 // GAME PERFORMANCE PROOF</span>
+      <h2 class="display-title" style="font-size: clamp(26px, 3.5vw, 44px); margin-top: 1rem;">
+        STABILITAS FRAME RATE & RESPONSIVITAS GAME
+      </h2>
+      <p style="font-size: 14px; color: #D4D4D8; margin-top: 1rem; max-width: 44ch;">
+        Grafik bukti statistik rendering engine game shooter secara real-time pada browser.
+      </p>
+
+      <div class="proof-number">
+        60<span style="font-size: 20px; color: #FFF;"> FPS</span>
+      </div>
+      <div class="mono-meta" style="background: rgba(255,255,255,0.1); color: #A1A1AA;">STABLE FRAME RATE / INPUT LATENCY 2ms</div>
+    </div>
+
+    <!-- GRAFIK VISUAL GELOMBANG SINE -->
+    <div style="background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255,255,255,0.2); padding: 20px; border-radius: 16px; height: 220px;">
+      <svg id="sine-svg" width="100%" height="100%" viewBox="0 0 500 220" preserveAspectRatio="none"></svg>
+    </div>
+  </section>
+
+  <!-- SECTION DIAGRAM ARCHITECTURE GAME -->
+  <section id="diagram" class="diagram-section">
+    <div>
+      <span class="mono-meta">04 // GAME SYSTEM ARCHITECTURE</span>
+      <h2 class="display-title" style="font-size: clamp(26px, 3.5vw, 44px); margin-top: 1rem;">
+        DIAGRAM LOGIKA GAME
+      </h2>
+
+      <div class="def-list">
+        <div class="def-row">
+          <span style="color: var(--purple-accent); font-weight: 700;">SYS-01</span>
+          <span>Player Control & Aiming</span>
+          <span style="text-align: right; font-weight: 700;">KEYBOARD/MOUSE</span>
+        </div>
+        <div class="def-row">
+          <span style="color: var(--purple-accent); font-weight: 700;">SYS-02</span>
+          <span>Bullet Projectile Spawner</span>
+          <span style="text-align: right; font-weight: 700;">DELTA TIME</span>
+        </div>
+        <div class="def-row">
+          <span style="color: var(--purple-accent); font-weight: 700;">SYS-03</span>
+          <span>Enemy Collision Detection</span>
+          <span style="text-align: right; font-weight: 700;">2D HITBOX</span>
+        </div>
+        <div class="def-row">
+          <span style="color: var(--purple-accent); font-weight: 700;">SYS-04</span>
+          <span>Score System & Game Over</span>
+          <span style="text-align: right; font-weight: 700;">REAL-TIME UI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAGRAM VISUAL RADAR/TARGETING -->
+    <div style="display: flex; align-items: center; justify-content: center;">
+      <svg style="width: 100%; height: 280px; border: var(--border-black); border-radius: 16px; background: #FFF; box-shadow: var(--shadow-hard);" viewBox="0 0 400 300">
+        <line x1="20" y1="150" x2="380" y2="150" stroke="#121212" stroke-width="2" stroke-dasharray="4 4" />
+        <line x1="200" y1="20" x2="200" y2="280" stroke="#121212" stroke-width="2" stroke-dasharray="4 4" />
+        <circle cx="200" cy="150" r="90" stroke="#121212" stroke-width="3" fill="var(--bg-stage)" />
+        <circle cx="200" cy="150" r="50" stroke="#121212" stroke-width="2" fill="none" />
+        <circle cx="200" cy="150" r="12" fill="var(--purple-accent)" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>CHEVELIN ANGEL © 2026</span>
+    <span>WEB DEVELOPER & GAME CREATOR</span>
+  </footer>
+
+  <script>
+    // SCRIPT GRAFIK GELOMBANG SINE (PERFORMANCE PROOF)
+    document.addEventListener('DOMContentLoaded', () => {
+      const svg = document.getElementById('sine-svg');
+      if (svg) {
+        let path = "M 0 110";
+        for (let i = 0; i <= 100; i++) {
+          const x = (i / 100) * 500;
+          const y = 110 + Math.sin(i * 0.2) * 25;
+          path += ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+        }
+        svg.innerHTML = `<path d="${path}" fill="none" stroke="var(--yellow-pop)" stroke-width="4"/>`;
+      }
+    });
+  </script>
+</body>
+</html>
