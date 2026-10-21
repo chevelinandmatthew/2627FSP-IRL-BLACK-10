@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeafVision AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8f2;
+      color: #263b2d;
+    }
+
+    header {
+      background: #246b45;
+      color: white;
+      padding: 18px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    header h2 {
+      margin: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 45px 20px;
+      background: #e0f0df;
+    }
+
+    .hero h1 {
+      color: #246b45;
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 25px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px #0000000d;
+    }
+
+    h2 {
+      color: #246b45;
+    }
+
+    .preview {
+      width: 100%;
+      min-height: 220px;
+      background: #f0f5ee;
+      border: 2px dashed #b6ccb7;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    #photo {
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+    }
+
+    #video {
+      display: none;
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+    }
+
+    button, .upload-button {
+      display: inline-block;
+      border: none;
+      border-radius: 9px;
+      padding: 12px 15px;
+      margin: 4px 2px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .green {
+      background: #246b45;
+      color: white;
+    }
+
+    .light {
+      background: #e5f0e4;
+      color: #246b45;
+    }
+
+    #classify {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .result {
+      padding: 18px;
+      background: #f4f8f2;
+      border-radius: 12px;
+      min-height: 100px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .category {
+      flex: 1;
+      text-align: center;
+      padding: 12px 5px;
+      background: #f4f8f2;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .category span {
+      display: block;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #68786c;
+      line-height: 1.6;
+    }
+
+    .prediction {
+      margin: 12px 0;
+    }
+
+    .bar {
+      height: 10px;
+      background: #dce8da;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #246b45;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    footer {
+      background: #246b45;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 650px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h2>🌿 LeafVision AI</h2>
+    <nav>
+      <a href="#beranda">Beranda</a>
+      <a href="#deteksi">Deteksi Daun</a>
+      <a href="#tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="beranda">
+    <h1>LeafVision AI 🍃</h1>
+    <p>
+      Kenali kondisi visual daun melalui kamera
+      dan teknologi kecerdasan buatan.
+    </p>
+  </section>
+
+  <main class="container">
+
+    <section class="card" id="deteksi">
+      <h2>📷 Ambil Gambar Daun</h2>
+      <p>Arahkan kamera ke daun atau pilih foto dari galeri.</p>
+
+      <div class="preview">
+        <div id="placeholder">
+          <span style="font-size:50px;">🌱</span>
+          <p>Foto daun akan muncul di sini</p>
+        </div>
+
+        <video id="video" autoplay playsinline muted></video>
+        <img id="photo" alt="Foto daun yang dipilih">
+      </div>
+
+      <button class="green" id="openCamera">
+        📷 Buka Kamera
+      </button>
+
+      <button class="light" id="switchCamera" style="display: none;">
+        🔄 Ganti Kamera
+      </button>
+
+      <button class="light" id="capture" disabled>
+        Ambil Foto
+      </button>
+
+      <label for="fileInput" class="upload-button light">
+        🖼️ Unggah Foto
+      </label>
+
+      <input type="file" id="fileInput" accept="image/*">
+
+      <button class="light" id="classify" disabled>
+        ✨ Klasifikasikan Daun
+      </button>
+
+      <p class="note" id="message">
+        Pilih atau ambil foto daun untuk memulai.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>🔎 Hasil Klasifikasi</h2>
+
+      <div class="result" id="result" aria-live="polite">
+        <strong>Belum ada hasil</strong>
+        <p>Unggah atau ambil foto untuk memulai klasifikasi.</p>
+      </div>
+
+      <h3>Kategori Daun</h3>
+
+      <div class="categories">
+        <div class="category">
+          <span>🍃</span>
+          Sehat
+        </div>
+
+        <div class="category">
+          <span>🌿</span>
+          Menguning
+        </div>
+
+        <div class="category">
+          <span>🍂</span>
+          Bercak
+        </div>
+      </div>
+
+      <p class="note">
+        Hasil merupakan prediksi kondisi visual berdasarkan model AI,
+        bukan diagnosis penyakit tanaman.
+      </p>
+    </section>
+
+    <section class="card" id="tentang" style="grid-column: 1 / -1;">
+      <h2>🌍 Tentang LeafVision AI</h2>
+
+      <p>
+        LeafVision AI adalah proyek sains yang memanfaatkan
+        kecerdasan buatan untuk mengelompokkan kondisi visual daun
+        menjadi tiga kategori: sehat, menguning, dan bercak.
+      </p>
+
+      <p>
+        Pengguna dapat mengambil gambar menggunakan kamera atau
+        mengunggah foto untuk mendapatkan prediksi dari model AI.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>🌿 LeafVision AI — Proyek Sains</p>
+  </footer>
+
+  <!-- Library TensorFlow.js & Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+  <script>
+    const MODEL_URL = "https://teachablemachine.withgoogle.com/models/O2ZPC7vAu/";
+
+    const openCamera = document.getElementById("openCamera");
+    const switchCamera = document.getElementById("switchCamera");
+    const capture = document.getElementById("capture");
+    const fileInput = document.getElementById("fileInput");
+    const video = document.getElementById("video");
+    const photo = document.getElementById("photo");
+    const placeholder = document.getElementById("placeholder");
+    const classify = document.getElementById("classify");
+    const message = document.getElementById("message");
+    const result = document.getElementById("result");
+
+    let cameraStream = null;
+    let model = null;
+    let selectedImageURL = null;
+    let currentFacingMode = "environment";
+
+    // Pengecekan otomatis status HTTPS / Keamanan
+    window.addEventListener("DOMContentLoaded", function () {
+      if (!window.isSecureContext && window.location.protocol !== "localhost:") {
+        message.innerHTML = "⚠️ <strong>HP Membutuhkan Koneksi Aman (HTTPS):</strong><br>Akses langsung ke kamera diblokir browser jika dibuka tanpa HTTPS. Silakan gunakan tombol <strong>🖼️ Unggah Foto</strong> atau upload file HTML ini ke Vercel/Netlify/GitHub Pages.";
+      }
+    });
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+      }
+      video.srcObject = null;
+    }
+
+    async function startCamera(facingMode) {
+      try {
+        if (!window.isSecureContext) {
+          throw new Error("Koneksi tidak aman. Browser HP mewajibkan alamat HTTPS untuk kamera.");
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Kamera tidak didukung atau diblokir browser.");
+        }
+
+        stopCamera();
+
+        const constraints = {
+          video: {
+            facingMode: { ideal: facingMode },
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          },
+          audio: false
+        };
+
+        cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+        video.srcObject = cameraStream;
+        video.style.display = "block";
+        photo.style.display = "none";
+        placeholder.style.display = "none";
+        capture.disabled = false;
+        switchCamera.style.display = "inline-block";
+
+        await video.play();
+
+        message.textContent = "Kamera aktif. Arahkan ke daun lalu klik 'Ambil Foto'.";
+
+      } catch (error) {
+        console.error(error);
+        message.innerHTML = "❌ <strong>Gagal Membuka Kamera:</strong> " + error.message + "<br>Gunakan tombol <strong>🖼️ Unggah Foto</strong> sebagai alternatif.";
+      }
+    }
+
+    openCamera.addEventListener("click", function () {
+      startCamera(currentFacingMode);
+    });
+
+    switchCamera.addEventListener("click", function () {
+      currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+      startCamera(currentFacingMode);
+    });
+
+    capture.addEventListener("click", function () {
+      if (!video.videoWidth || !video.videoHeight) {
+        message.textContent = "Tunggu sebentar sampai kamera siap.";
+        return;
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext("2d");
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      stopCamera();
+      capture.disabled = true;
+      switchCamera.style.display = "none";
+
+      if (selectedImageURL) {
+        URL.revokeObjectURL(selectedImageURL);
+        selectedImageURL = null;
+      }
+
+      displayPhoto(canvas.toDataURL("image/jpeg"));
+    });
+
+    function displayPhoto(source) {
+      photo.onload = function () {
+        photo.style.display = "block";
+        video.style.display = "none";
+        placeholder.style.display = "none";
+        classify.disabled = false;
+
+        result.innerHTML =
+          "<strong>Foto berhasil dimuat!</strong>" +
+          "<p>Tekan tombol klasifikasi untuk menjalankan AI.</p>";
+
+        message.textContent = "Foto siap diklasifikasikan.";
+      };
+
+      photo.onerror = function () {
+        classify.disabled = true;
+        message.textContent = "Foto tidak dapat dibuka. Coba foto lain.";
+      };
+
+      photo.src = source;
+    }
+
+    fileInput.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        message.textContent = "Pilih file gambar yang valid.";
+        fileInput.value = "";
+        return;
+      }
+
+      stopCamera();
+      capture.disabled = true;
+      switchCamera.style.display = "none";
+
+      if (selectedImageURL) {
+        URL.revokeObjectURL(selectedImageURL);
+      }
+
+      selectedImageURL = URL.createObjectURL(file);
+      displayPhoto(selectedImageURL);
+    });
+
+    classify.addEventListener("click", async function () {
+      if (!photo.src || photo.style.display === "none" || !photo.complete) {
+        message.textContent = "Foto belum siap. Silakan ambil atau unggah foto terlebih dahulu.";
+        return;
+      }
+
+      try {
+        classify.disabled = true;
+        openCamera.disabled = true;
+
+        result.innerHTML = "<strong>Menganalisis...</strong><p>AI sedang memproses foto.</p>";
+        message.textContent = "Mohon tunggu sebentar.";
+
+        if (!model) {
+          message.textContent = "Memuat model AI Teachable Machine...";
+
+          if (typeof tmImage === "undefined") {
+            throw new Error("Library gagal dimuat. Periksa koneksi internet.");
+          }
+
+          model = await tmImage.load(
+            MODEL_URL + "model.json",
+            MODEL_URL + "metadata.json"
+          );
+        }
+
+        const predictions = await model.predict(photo);
+
+        if (!predictions || predictions.length === 0) {
+          throw new Error("Model AI tidak menghasilkan prediksi.");
+        }
+
+        predictions.sort((a, b) => b.probability - a.probability);
+
+        const best = predictions[0];
+        const confidence = (best.probability * 100).toFixed(1);
+
+        result.replaceChildren();
+
+        const heading = document.createElement("strong");
+        heading.textContent = "Hasil Prediksi: " + best.className;
+        result.appendChild(heading);
+
+        const percentage = document.createElement("p");
+        percentage.textContent = "Tingkat Keyakinan AI: " + confidence + "%";
+        result.appendChild(percentage);
+
+        const detailHeading = document.createElement("p");
+        detailHeading.textContent = "Rincian Probabilitas Tiap Kategori:";
+        result.appendChild(detailHeading);
+
+        predictions.forEach(function (item) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "prediction";
+
+          const label = document.createElement("div");
+          label.textContent = item.className + " — " + (item.probability * 100).toFixed(1) + "%";
+
+          const bar = document.createElement("div");
+          bar.className = "bar";
+
+          const fill = document.createElement("div");
+          fill.className = "bar-fill";
+          fill.style.width = Math.max(0, Math.min(100, item.probability * 100)) + "%";
+
+          bar.appendChild(fill);
+          wrapper.appendChild(label);
+          wrapper.appendChild(bar);
+          result.appendChild(wrapper);
+        });
+
+        message.textContent = "Klasifikasi selesai.";
+
+      } catch (error) {
+        console.error(error);
+        result.innerHTML = "<strong>Gagal Memproses AI</strong><p>Terjadi kesalahan saat memuat model atau memproses gambar.</p>";
+        message.textContent = "Periksa koneksi internet dan tautan model.";
+      } finally {
+        classify.disabled = false;
+        openCamera.disabled = false;
+      }
+    });
+
+    window.addEventListener("beforeunload", stopCamera);
+  </script>
+
+</body>
+</html>
