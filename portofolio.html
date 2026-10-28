@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MULTI-HUB — Chevelin & Matthew</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Opsional: dipakai hanya jika LEAF_MODEL_URL diisi -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+<style>
+:root{
+  --bg:#F5F3FF; --bg2:#E9E2FF; --ink:#121212; --ink2:#4A4A4A;
+  --yellow:#5EEAD4; --purple:#8B5CF6; --pink:#FF6B9D; --green:#22A06B; --maroon:#5B0F1A; --blue:#4CC9F0;
+  --bd:2.5px solid var(--ink); --sh:5px 5px 0 var(--ink); --sh-lg:8px 8px 0 var(--ink);
+  --f-d:'Space Grotesk',sans-serif; --f-b:'Plus Jakarta Sans',sans-serif; --f-m:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;overflow-x:hidden}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--f-b);line-height:1.6;overflow-x:hidden;
+  background-image:radial-gradient(rgba(18,18,18,.09) 1.2px,transparent 1.2px);background-size:22px 22px;
+}
+a{color:inherit}
+button{font-family:inherit}
+
+/* ===== atoms ===== */
+.tag{font-family:var(--f-m);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  display:inline-block;padding:5px 12px;border:2px solid var(--ink);border-radius:8px;background:#fff;box-shadow:3px 3px 0 var(--ink)}
+.tag.y{background:var(--yellow)} .tag.p{background:var(--purple);color:#fff} .tag.k{background:var(--pink)} .tag.g{background:var(--green);color:#fff}
+.title{font-family:var(--f-d);font-weight:700;text-transform:uppercase;letter-spacing:-.02em;line-height:1.02}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:999px;border:var(--bd);
+  background:#fff;color:var(--ink);font-family:var(--f-d);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:var(--sh-lg);background:var(--yellow)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.y{background:var(--yellow)} .btn.y:hover{background:var(--purple);color:#fff}
+.btn.p{background:var(--purple);color:#fff} .btn.p:hover{background:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:var(--sh)}
+.card{background:#fff;border:var(--bd);border-radius:20px;box-shadow:var(--sh);padding:28px}
+
+section{padding:96px 5vw;border-bottom:var(--bd);position:relative}
+.sec-head{max-width:1200px;margin:0 auto 48px}
+.sec-head h2{font-size:clamp(30px,4.5vw,54px);margin-top:14px}
+.sec-head p{color:var(--ink2);max-width:560px;margin-top:12px}
+.wrap{max-width:1200px;margin:0 auto}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ===== nav ===== */
+.nav{position:fixed;inset:0 0 auto 0;height:72px;z-index:100;background:var(--yellow);border-bottom:var(--bd);
+  display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+.brand{font-family:var(--f-d);font-weight:700;font-size:20px;text-decoration:none;background:#fff;border:var(--bd);
+  border-radius:10px;padding:4px 14px;box-shadow:3px 3px 0 var(--ink);transition:.15s}
+.brand:hover{transform:rotate(-3deg)}
+.brand i{color:var(--purple);font-style:normal}
+.nav ul{display:flex;gap:26px;list-style:none}
+.nav ul a{font-family:var(--f-d);font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;position:relative;padding:4px 0}
+.nav ul a::after{content:"";position:absolute;left:0;bottom:-2px;height:3px;width:0;background:var(--ink);transition:width .2s}
+.nav ul a:hover::after{width:100%}
+.burger{display:none;width:46px;height:46px;border:var(--bd);border-radius:12px;background:#fff;box-shadow:3px 3px 0 var(--ink);font-size:18px;cursor:pointer}
+.progress{position:fixed;top:72px;left:0;height:4px;width:0;background:var(--purple);z-index:101}
+
+/* ===== hero ===== */
+.hero{margin-top:72px;min-height:calc(100vh - 72px);background:var(--bg2);display:flex;align-items:center;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;max-width:1200px;margin:0 auto;width:100%}
+.hero h1{font-size:clamp(40px,6.6vw,88px);margin:20px 0}
+.hl{background:var(--yellow);border:var(--bd);border-radius:14px;padding:0 14px;display:inline-block;transform:rotate(-1.5deg);box-shadow:var(--sh)}
+.hl.p{background:var(--purple);color:#fff;transform:rotate(1.5deg)}
+.hero p.lead{font-size:17px;color:var(--ink2);max-width:520px;margin-bottom:30px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.stats{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+.stat{background:#fff;border:var(--bd);border-radius:14px;box-shadow:3px 3px 0 var(--ink);padding:10px 18px}
+.stat b{font-family:var(--f-d);font-size:26px;display:block;line-height:1}
+.stat span{font-family:var(--f-m);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+
+.stage{position:relative;height:440px}
+.blob{position:absolute;border:var(--bd);box-shadow:var(--sh)}
+.b1{width:300px;height:300px;border-radius:50%;background:var(--purple);top:40px;left:50px;animation:fl 6s ease-in-out infinite}
+.b2{width:170px;height:170px;border-radius:28px;background:var(--pink);bottom:20px;left:0;transform:rotate(-12deg);animation:fl 5s ease-in-out infinite reverse}
+.b3{width:130px;height:130px;border-radius:50%;background:var(--yellow);top:0;right:20px;animation:fl 7s ease-in-out infinite}
+.b4{width:150px;height:150px;border-radius:24px;background:var(--blue);bottom:50px;right:10px;transform:rotate(10deg);animation:fl 5.5s ease-in-out infinite}
+.stage .center{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
+.center div{background:#fff;border:var(--bd);border-radius:18px;box-shadow:var(--sh-lg);padding:18px 26px;text-align:center;transform:rotate(-3deg)}
+.center strong{font-family:var(--f-d);font-size:30px;display:block;line-height:1}
+.center span{font-family:var(--f-m);font-size:11px;letter-spacing:.1em}
+@keyframes fl{50%{transform:translateY(-16px) rotate(4deg)}}
+
+/* ===== marquee ===== */
+.marquee{background:var(--ink);color:var(--yellow);border-bottom:var(--bd);overflow:hidden;padding:14px 0;white-space:nowrap}
+.marquee div{display:inline-block;animation:mq 28s linear infinite;font-family:var(--f-d);font-weight:700;font-size:18px;letter-spacing:.08em;text-transform:uppercase}
+.marquee span{margin:0 22px;color:var(--pink)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ===== creators ===== */
+#creators{background:var(--bg2)}
+.cr-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.cr{padding:0;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.cr:hover{transform:translate(-3px,-3px);box-shadow:var(--sh-lg)}
+.cr-top{padding:26px 28px;border-bottom:var(--bd);display:flex;gap:18px;align-items:center}
+.cr:nth-child(1) .cr-top{background:var(--yellow)} .cr:nth-child(2) .cr-top{background:var(--purple);color:#fff}
+.av{width:78px;height:78px;border-radius:50%;border:var(--bd);background:#fff;color:var(--ink);display:grid;place-items:center;font-family:var(--f-d);font-weight:700;font-size:28px;box-shadow:3px 3px 0 var(--ink);flex:none}
+.cr-top h3{font-family:var(--f-d);font-size:26px;line-height:1.05;text-transform:uppercase;margin-top:6px}
+.cr-top small{font-size:12.5px;opacity:.85;display:block;margin-top:4px}
+.cr-body{padding:24px 28px 28px}
+.row{display:flex;gap:14px;align-items:flex-start;padding:11px 0;border-bottom:2px dashed #d8d4c0;font-size:14px}
+.row:last-of-type{border:none}
+.row i{width:34px;height:34px;flex:none;display:grid;place-items:center;border:2px solid var(--ink);border-radius:10px;background:var(--bg2);font-size:14px}
+.row small{display:block;font-family:var(--f-m);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.row b{font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chips .tag{box-shadow:none;font-size:10.5px}
+
+/* ===== arcade ===== */
+#arcade{background:var(--ink);color:#fff}
+#arcade .sec-head p{color:#cfcfcf}
+#arcade .tag{color:var(--ink)}
+.tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:26px}
+.tab{padding:12px 20px;border:2px solid #fff;border-radius:12px;background:transparent;color:#fff;font-family:var(--f-d);font-weight:700;font-size:13px;
+  text-transform:uppercase;letter-spacing:.04em;cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:center}
+.tab:hover{background:rgba(255,255,255,.12);transform:translateY(-2px)}
+.tab.on{background:var(--yellow);color:var(--ink);border-color:var(--yellow);box-shadow:4px 4px 0 var(--purple)}
+.screen{background:#fff;color:var(--ink);border:var(--bd);border-radius:22px;box-shadow:8px 8px 0 var(--purple);overflow:hidden}
+.screen-bar{background:var(--yellow);border-bottom:var(--bd);padding:10px 18px;display:flex;align-items:center;gap:10px}
+.dots{display:flex;gap:6px}.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);display:block}
+.dots i:nth-child(1){background:var(--pink)}.dots i:nth-child(2){background:#fff}.dots i:nth-child(3){background:var(--green)}
+.screen-bar b{font-family:var(--f-m);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
+.screen-bar .hud{margin-left:auto;font-family:var(--f-m);font-size:12px;font-weight:600;display:flex;gap:14px}
+.pane{display:none;padding:22px;min-height:520px}
+.pane.on{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.pane iframe{width:100%;height:520px;border:var(--bd);border-radius:14px}
+.pane canvas{max-width:100%;border:var(--bd);border-radius:14px;touch-action:none;display:block}
+.hint{font-size:13px;color:var(--ink2);text-align:center}
+.hint kbd{font-family:var(--f-m);background:var(--bg2);border:2px solid var(--ink);border-radius:6px;padding:1px 8px;font-size:11px}
+.ttt{display:grid;grid-template-columns:repeat(3,96px);gap:10px}
+.cell{height:96px;border:var(--bd);border-radius:16px;background:#fff;box-shadow:4px 4px 0 var(--ink);font-family:var(--f-d);font-weight:700;font-size:46px;cursor:pointer;transition:.12s}
+.cell:hover:not(:disabled){background:var(--bg2);transform:translate(-2px,-2px)}
+.cell.x{color:var(--purple)}.cell.o{color:var(--pink)}
+.cell.win{background:var(--yellow);animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.12)}}
+.score{display:flex;gap:12px}
+.score div{border:var(--bd);border-radius:12px;padding:6px 18px;font-family:var(--f-d);font-weight:700;background:var(--bg2);text-align:center}
+.score small{display:block;font-family:var(--f-m);font-size:10px;font-weight:600}
+#ttt-status{font-family:var(--f-d);font-weight:700;font-size:18px;min-height:28px}
+
+/* ===== leaf ===== */
+#leafvision{background:#E4F7E8}
+.leaf-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.drop{border:3px dashed var(--green);border-radius:18px;background:#fff;min-height:260px;display:grid;place-items:center;cursor:pointer;overflow:hidden;margin:18px 0;transition:.15s;text-align:center;padding:20px}
+.drop:hover,.drop.over{background:#d4f2dc;transform:scale(1.01)}
+.drop img{max-width:100%;max-height:260px;border-radius:10px;display:none}
+.drop .ph{font-size:56px}.drop p{font-size:13px;color:var(--ink2)}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap}
+.res{background:#fff;border:var(--bd);border-radius:16px;padding:22px;min-height:260px;margin-top:18px}
+.res .empty{color:var(--ink2);text-align:center;padding-top:60px;font-size:14px}
+.verdict{font-family:var(--f-d);font-weight:700;font-size:24px;margin-bottom:4px}
+.bar{margin-top:14px}.bar span{font-size:13px;font-weight:600;display:flex;justify-content:space-between}
+.bar div{height:16px;border:2px solid var(--ink);border-radius:20px;background:#eee;overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;width:0;background:var(--green);transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.note{margin-top:16px;font-size:12px;color:var(--ink2);font-family:var(--f-m)}
+.spin{display:inline-block;animation:sp 1s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ===== mooncake ===== */
+#mooncake{background:var(--maroon);color:#fff;overflow:hidden}
+#mooncake .moon{position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffffff,#c4b5fd 60%,#8B5CF6);border:var(--bd);opacity:.9;box-shadow:0 0 90px rgba(167,139,250,.55)}
+#mooncake .sec-head{position:relative;z-index:1}
+#mooncake h2{color:var(--yellow)}
+#mooncake .sec-head p{color:#f3d5d8}
+.countdown{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.cd{background:#fff;color:var(--ink);border:var(--bd);border-radius:14px;box-shadow:4px 4px 0 var(--yellow);padding:10px 18px;text-align:center;min-width:78px}
+.cd b{font-family:var(--f-d);font-size:30px;display:block;line-height:1}
+.cd span{font-family:var(--f-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.moon-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;position:relative;z-index:1}
+.mc{background:#fff;color:var(--ink);border:var(--bd);border-radius:20px;box-shadow:6px 6px 0 var(--yellow);padding:28px}
+.mc h3{font-family:var(--f-d);font-size:22px;text-transform:uppercase;margin-bottom:6px}
+.mc p.s{font-size:13px;color:var(--ink2);margin-bottom:16px}
+.inp{width:100%;padding:13px 16px;border:var(--bd);border-radius:12px;font-family:var(--f-b);font-size:14px;margin-bottom:12px;background:var(--bg)}
+.inp:focus{outline:none;box-shadow:4px 4px 0 var(--purple)}
+.preview{background:#DCF8C6;border:2px solid var(--ink);border-radius:14px 14px 14px 2px;padding:12px 16px;font-size:13px;margin-bottom:14px}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{text-align:left;padding:13px 18px;border:var(--bd);border-radius:12px;background:#fff;font-weight:600;font-size:14px;cursor:pointer;transition:.12s;box-shadow:3px 3px 0 var(--ink)}
+.opt:hover:not(:disabled){background:var(--bg2);transform:translate(-2px,-2px)}
+.opt.ok{background:#b8f2cf}.opt.no{background:#ffc2d4}
+.q-meta{display:flex;justify-content:space-between;font-family:var(--f-m);font-size:11px;font-weight:600;margin-bottom:10px}
+#quiz-q{font-weight:700;font-size:16px}
+#quiz-msg{margin-top:14px;font-weight:700;font-size:14px;min-height:22px}
+
+footer{background:var(--ink);color:#fff;padding:36px 5vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--f-m);font-size:12px}
+footer b{color:var(--yellow)}
+.totop{position:fixed;right:22px;bottom:22px;width:50px;height:50px;border-radius:14px;border:var(--bd);background:var(--yellow);box-shadow:4px 4px 0 var(--ink);
+  font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:.2s;z-index:90}
+.totop.show{opacity:1;pointer-events:auto}.totop:hover{background:var(--purple);color:#fff}
+
+/* ===== responsive ===== */
+@media(max-width:900px){
+  section{padding:70px 5vw}
+  .hero-grid,.cr-grid,.leaf-grid,.moon-grid{grid-template-columns:1fr}
+  .stage{height:330px;transform:scale(.82);transform-origin:top center;margin-bottom:-50px}
+  .burger{display:block}
+  .nav ul{position:fixed;top:72px;left:0;right:0;background:var(--yellow);border-bottom:var(--bd);flex-direction:column;padding:20px 5vw;gap:16px;display:none}
+  .nav ul.open{display:flex}
+  .nav .btn.hide-m{display:none}
+  #mooncake .moon{width:200px;height:200px;right:-70px;top:-70px}
+}
+@media(max-width:480px){.ttt{grid-template-columns:repeat(3,80px)}.cell{height:80px;font-size:38px}.cr-top{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav class="nav">
+  <a href="#top" class="brand">MULTI-HUB<i>.</i></a>
+  <ul id="menu">
+    <li><a href="#creators">Profil Tim</a></li>
+    <li><a href="#arcade">Arcade</a></li>
+    <li><a href="#leafvision">LeafVision AI</a></li>
+    <li><a href="#mooncake">Kue Bulan</a></li>
+  </ul>
+  <a href="#arcade" class="btn y hide-m">🎮 Mainkan Game</a>
+  <button class="burger" id="burger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <span class="tag y">Chevelin Angel × Matthew Irawan</span>
+      <h1 class="title">Portofolio <span class="hl">&amp; Arcade</span> <span class="hl p">Hub 2026</span></h1>
+      <p class="lead">Satu portal untuk profil developer, AI LeafVision, Festival Kue Bulan 2026, dan 4 game interaktif yang bisa langsung kamu mainkan.</p>
+      <div class="hero-cta">
+        <a href="#arcade" class="btn y">🎮 Mainkan Arcade</a>
+        <a href="#leafvision" class="btn">🌿 Coba LeafVision</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>2</b><span>Developer</span></div>
+        <div class="stat"><b>4</b><span>Game</span></div>
+        <div class="stat"><b>1</b><span>AI Vision</span></div>
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div>
+      <div class="center"><div><strong>HUB 2026</strong><span>PLAY · LEARN · CELEBRATE</span></div></div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div>
+    <b>Shooter</b><span>✦</span><b>Galaxy Blaster</b><span>✦</span><b>Dino Run</b><span>✦</span><b>Tic Tac Toe</b><span>✦</span><b>LeafVision AI</b><span>✦</span><b>中秋节 2026</b><span>✦</span>
+    <b>Shooter</b><span>✦</span><b>Galaxy Blaster</b><span>✦</span><b>Dino Run</b><span>✦</span><b>Tic Tac Toe</b><span>✦</span><b>LeafVision AI</b><span>✦</span><b>中秋节 2026</b><span>✦</span>
+  </div>
+</div>
+
+<!-- CREATORS -->
+<section id="creators">
+  <div class="sec-head rv"><span class="tag p">01 // Developer Team</span><h2 class="title">Kenalan sama<br>tim kami</h2><p>Dua siswa BPK PENABUR Holis yang suka membangun, memimpin, dan berkompetisi.</p></div>
+  <div class="wrap cr-grid">
+    <article class="card cr rv">
+      <div class="cr-top"><div class="av">CA</div><div><span class="tag">Lead Developer</span><h3>Chevelin Angel</h3><small>SMA BPK PENABUR Holis</small></div></div>
+      <div class="cr-body">
+        <div class="row"><i class="fa-solid fa-phone"></i><div><small>Telepon</small><b>+62 821 3052 2336</b></div></div>
+        <div class="row"><i class="fa-brands fa-instagram"></i><div><small>Instagram</small><b>@chevelinn_</b></div></div>
+        <div class="row"><i class="fa-solid fa-id-badge"></i><div><small>Jabatan</small><b>Sekretaris OSIS KAIROS</b></div></div>
+        <div class="row"><i class="fa-solid fa-trophy"></i><div><small>Prestasi</small><b>Juara 1 &amp; 3 Nyanyi Mandarin, OSN IPA</b></div></div>
+        <div class="chips"><span class="tag">Public Speaking</span><span class="tag">Teamwork</span><span class="tag">Mandarin</span></div>
+      </div>
+    </article>
+    <article class="card cr rv">
+      <div class="cr-top"><div class="av">MI</div><div><span class="tag y">Project Developer</span><h3>Matthew Irawan</h3><small>SMAK BPK PENABUR Holis</small></div></div>
+      <div class="cr-body">
+        <div class="row"><i class="fa-solid fa-phone"></i><div><small>Telepon</small><b>+62 821 1704 4046</b></div></div>
+        <div class="row"><i class="fa-brands fa-instagram"></i><div><small>Instagram</small><b>@mattheeww.i</b></div></div>
+        <div class="row"><i class="fa-solid fa-users"></i><div><small>Pengalaman</small><b>Ketua Kelas (3 Periode) &amp; OSIS</b></div></div>
+        <div class="row"><i class="fa-solid fa-gamepad"></i><div><small>Esports</small><b>Juara 1 &amp; 2 Mobile Legends</b></div></div>
+        <div class="chips"><span class="tag">Leadership</span><span class="tag">Project Mgmt</span><span class="tag">Critical Thinking</span></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ARCADE -->
+<section id="arcade">
+  <div class="sec-head rv"><span class="tag y">02 // Game Arcade</span><h2 class="title">Pusat game<br>interaktif</h2><p>Pilih game, lalu main langsung di layar. Bisa di laptop maupun HP.</p></div>
+  <div class="wrap rv">
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-g="shooter"><i class="fa-solid fa-crosshairs"></i> Shooter</button>
+      <button class="tab" data-g="galaxy"><i class="fa-solid fa-rocket"></i> Galaxy Blaster</button>
+      <button class="tab" data-g="dino"><i class="fa-solid fa-dragon"></i> Dino Run</button>
+      <button class="tab" data-g="ttt"><i class="fa-solid fa-xmark"></i> Tic Tac Toe</button>
+    </div>
+    <div class="screen">
+      <div class="screen-bar">
+        <div class="dots"><i></i><i></i><i></i></div><b id="screen-name">Shooter Game</b>
+        <div class="hud" id="hud"></div>
+      </div>
+
+      <div class="pane on" id="p-shooter">
+        <iframe src="https://chevelinandmatthew.github.io/2627FSP-IRL-BLACK-10/shootergame.html" title="Shooter Game" loading="lazy"></iframe>
+      </div>
+
+      <div class="pane" id="p-galaxy">
+        <canvas id="gx" width="420" height="480"></canvas>
+        <p class="hint">Gerakkan <b>mouse / jari</b> untuk bergerak, <b>klik / tap</b> atau <kbd>Space</kbd> untuk menembak.</p>
+        <button class="btn y" id="gx-restart">↻ Main Lagi</button>
+      </div>
+
+      <div class="pane" id="p-dino">
+        <canvas id="dn" width="640" height="220"></canvas>
+        <p class="hint">Tekan <kbd>Space</kbd> / <kbd>↑</kbd> atau tap layar untuk melompat. Hindari kaktus!</p>
+        <button class="btn y" id="dn-restart">↻ Main Lagi</button>
+      </div>
+
+      <div class="pane" id="p-ttt">
+        <div class="score">
+          <div><small>PEMAIN X</small><span id="sx">0</span></div>
+          <div><small>SERI</small><span id="sd">0</span></div>
+          <div><small>PEMAIN O</small><span id="so">0</span></div>
+        </div>
+        <div class="ttt" id="ttt"></div>
+        <p id="ttt-status"></p>
+        <button class="btn y" id="ttt-reset">↻ Ronde Baru</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAFVISION -->
+<section id="leafvision">
+  <div class="sec-head rv"><span class="tag g">03 // AI Vision</span><h2 class="title">🌿 LeafVision<br>AI Detector</h2><p>Unggah foto daun dan lihat prediksi kondisinya lengkap dengan tingkat keyakinan.</p></div>
+  <div class="wrap leaf-grid">
+    <div class="card rv">
+      <h3 class="title" style="font-size:22px">📷 Foto Daun</h3>
+      <label class="drop" id="drop" for="leaf-input">
+        <img id="leaf-img" alt="Preview daun">
+        <div id="leaf-ph"><div class="ph">🌱</div><p><b>Klik</b> atau seret foto daun ke sini</p></div>
+      </label>
+      <input type="file" id="leaf-input" accept="image/*" hidden>
+      <div class="btnrow">
+        <button class="btn" id="btn-pick">🖼️ Pilih Gambar</button>
+        <button class="btn y" id="btn-analyze" disabled>✨ Analisis AI</button>
+      </div>
+    </div>
+    <div class="card rv">
+      <h3 class="title" style="font-size:22px">🔎 Hasil Analisis</h3>
+      <div class="res" id="leaf-res"><div class="empty">Belum ada analisis.<br>Unggah foto daun terlebih dahulu.</div></div>
+      <p class="note" id="leaf-note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- MOONCAKE -->
+<section id="mooncake">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="sec-head rv">
+    <span class="tag y">04 // Cultural Event</span>
+    <h2 class="title">中秋节<br>Festival Kue Bulan 2026</h2>
+    <p>Puncak perayaan: Jumat, 25 September 2026.</p>
+    <div class="countdown" id="cd"></div>
+  </div>
+  <div class="wrap moon-grid">
+    <div class="mc rv">
+      <h3><i class="fa-brands fa-whatsapp"></i> Generator Ucapan WA</h3>
+      <p class="s">Tulis nama penerima, lihat pratinjaunya, lalu kirim.</p>
+      <input class="inp" id="wa-name" placeholder="Nama penerima…" maxlength="40">
+      <div class="preview" id="wa-prev"></div>
+      <button class="btn y" style="width:100%" id="wa-send">Kirim via WhatsApp ↗</button>
+    </div>
+    <div class="mc rv">
+      <h3>🥮 Kuis Mid-Autumn</h3>
+      <div class="q-meta"><span id="q-num"></span><span id="q-score"></span></div>
+      <p id="quiz-q"></p>
+      <div class="opts" id="quiz-opts"></div>
+      <p id="quiz-msg"></p>
+      <button class="btn" id="quiz-next" style="margin-top:12px;display:none">Lanjut →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span><b>CHEVELIN ANGEL</b> &amp; <b>MATTHEW IRAWAN</b> © 2026</span>
+  <span>MULTI-HUB · PLAY · LEARN · CELEBRATE</span>
+</footer>
+
+<button class="totop" id="totop" aria-label="Ke atas"><i class="fa-solid fa-arrow-up"></i></button>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+/* ---------- nav, progress, reveal ---------- */
+$('#burger').onclick=()=>$('#menu').classList.toggle('open');
+$$('#menu a').forEach(a=>a.onclick=()=>$('#menu').classList.remove('open'));
+addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  $('#progress').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  $('#totop').classList.toggle('show',h.scrollTop>600);
+},{passive:true});
+$('#totop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+$$('.rv').forEach(el=>io.observe(el));
+
+/* ---------- arcade tabs ---------- */
+const names={shooter:'Shooter Game',galaxy:'Galaxy Blaster',dino:'Dino Run',ttt:'Tic Tac Toe'};
+let current='shooter';
+$$('.tab').forEach(t=>t.onclick=()=>{
+  current=t.dataset.g;
+  $$('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  $$('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+current));
+  $('#screen-name').textContent=names[current];
+  $('#hud').textContent='';
+  if(current==='galaxy')gx.start(); else gx.stop();
+  if(current==='dino')dn.start(); else dn.stop();
+});
+const hud=t=>$('#hud').textContent=t;
+
+/* ---------- GALAXY BLASTER ---------- */
+const gx=(()=>{
+  const c=$('#gx'),x=c.getContext('2d');let raf,st;
+  const reset=()=>st={px:210,bullets:[],en:[],stars:Array.from({length:50},()=>({x:Math.random()*420,y:Math.random()*480,s:Math.random()*2+.5})),score:0,lives:3,t:0,over:false,cool:0};
+  const shoot=()=>{if(st&&!st.over&&st.cool<=0){st.bullets.push({x:st.px,y:430});st.cool=8}};
+  const pos=e=>{const r=c.getBoundingClientRect(),p=e.touches?e.touches[0]:e;st.px=Math.max(18,Math.min(402,(p.clientX-r.left)*420/r.width))};
+  c.addEventListener('mousemove',e=>st&&pos(e));
+  c.addEventListener('touchmove',e=>{e.preventDefault();pos(e)},{passive:false});
+  c.addEventListener('touchstart',e=>{pos(e);shoot()},{passive:true});
+  c.addEventListener('click',shoot);
+  addEventListener('keydown',e=>{if(current==='galaxy'&&e.code==='Space'){e.preventDefault();shoot()}});
+  function loop(){
+    st.t++;st.cool--;
+    x.fillStyle='#0b0620';x.fillRect(0,0,420,480);
+    x.fillStyle='#fff';st.stars.forEach(s=>{s.y+=s.s;if(s.y>480)s.y=0;x.globalAlpha=.4+s.s/4;x.fillRect(s.x,s.y,2,2)});x.globalAlpha=1;
+    if(!st.over){
+      if(st.t%Math.max(18,50-Math.floor(st.score/60))===0)st.en.push({x:Math.random()*380+10,y:-20,v:1.4+Math.random()+st.score/400});
+      st.bullets.forEach(b=>b.y-=9);st.bullets=st.bullets.filter(b=>b.y>-10);
+      st.en.forEach(e=>e.y+=e.v);
+      st.en=st.en.filter(e=>{
+        for(let i=0;i<st.bullets.length;i++){const b=st.bullets[i];
+          if(Math.abs(b.x-e.x-10)<16&&Math.abs(b.y-e.y-10)<16){st.bullets.splice(i,1);st.score+=10;return false}}
+        if(e.y>480){st.lives--;if(st.lives<=0)st.over=true;return false}
+        return true});
+    }
+    // player
+    x.fillStyle='#8B5CF6';x.beginPath();x.moveTo(st.px,420);x.lineTo(st.px-18,455);x.lineTo(st.px+18,455);x.closePath();x.fill();
+    x.strokeStyle='#fff';x.lineWidth=2;x.stroke();
+    x.fillStyle='#5EEAD4';st.bullets.forEach(b=>x.fillRect(b.x-2,b.y,4,12));
+    x.fillStyle='#FF6B9D';st.en.forEach(e=>{x.fillRect(e.x,e.y,22,22);x.fillStyle='#fff';x.fillRect(e.x+5,e.y+7,4,4);x.fillRect(e.x+13,e.y+7,4,4);x.fillStyle='#FF6B9D'});
+    hud('SKOR '+st.score+'  ·  NYAWA '+'♥'.repeat(Math.max(st.lives,0)));
+    if(st.over){x.fillStyle='rgba(0,0,0,.65)';x.fillRect(0,0,420,480);x.fillStyle='#5EEAD4';x.font='700 32px Space Grotesk';x.textAlign='center';
+      x.fillText('GAME OVER',210,230);x.fillStyle='#fff';x.font='600 16px Plus Jakarta Sans';x.fillText('Skor akhir: '+st.score,210,262);x.textAlign='left'}
+    raf=requestAnimationFrame(loop);
+  }
+  $('#gx-restart').onclick=reset;
+  return{start(){reset();cancelAnimationFrame(raf);loop()},stop(){cancelAnimationFrame(raf)}};
+})();
+
+/* ---------- DINO RUN ---------- */
+const dn=(()=>{
+  const c=$('#dn'),x=c.getContext('2d');let raf,st,hi=+(localStorage.getItem?.('dino-hi')||0);
+  const reset=()=>st={y:150,vy:0,obs:[],t:0,score:0,speed:6,over:false};
+  const jump=()=>{if(!st)return;if(st.over)return;if(st.y>=150)st.vy=-13.5};
+  addEventListener('keydown',e=>{if(current==='dino'&&(e.code==='Space'||e.code==='ArrowUp')){e.preventDefault();jump()}});
+  c.addEventListener('pointerdown',jump);
+  function loop(){
+    x.fillStyle='#E9E2FF';x.fillRect(0,0,640,220);
+    x.fillStyle='#121212';x.fillRect(0,180,640,3);
+    if(!st.over){
+      st.t++;st.score+=.2;st.speed=6+st.score/60;
+      st.vy+=.85;st.y+=st.vy;if(st.y>150){st.y=150;st.vy=0}
+      if(st.t%Math.floor(1000/st.speed/1.1+Math.random()*20)===0||(!st.obs.length&&st.t>30))if(!st.obs.length||st.obs[st.obs.length-1].x<420)st.obs.push({x:660,h:24+Math.random()*22});
+      st.obs.forEach(o=>o.x-=st.speed);st.obs=st.obs.filter(o=>o.x>-30);
+      for(const o of st.obs){if(o.x<84&&o.x+18>52&&st.y+30>180-o.h){st.over=true;hi=Math.max(hi,Math.floor(st.score));try{localStorage.setItem('dino-hi',hi)}catch(e){}}}
+    }
+    // player
+    x.fillStyle='#22A06B';x.fillRect(52,st.y,32,32);x.strokeStyle='#121212';x.lineWidth=3;x.strokeRect(52,st.y,32,32);
+    x.fillStyle='#fff';x.fillRect(72,st.y+7,7,7);x.fillStyle='#121212';x.fillRect(75,st.y+9,3,3);
+    x.fillStyle='#FF6B9D';st.obs.forEach(o=>{x.fillRect(o.x,180-o.h,18,o.h);x.strokeRect(o.x,180-o.h,18,o.h)});
+    hud('SKOR '+Math.floor(st.score)+'  ·  REKOR '+hi);
+    if(st.over){x.fillStyle='rgba(18,18,18,.75)';x.fillRect(0,0,640,220);x.fillStyle='#5EEAD4';x.font='700 30px Space Grotesk';x.textAlign='center';
+      x.fillText('GAME OVER · Skor '+Math.floor(st.score),320,110);x.fillStyle='#fff';x.font='600 14px Plus Jakarta Sans';x.fillText('Tekan Main Lagi',320,138);x.textAlign='left'}
+    raf=requestAnimationFrame(loop);
+  }
+  $('#dn-restart').onclick=reset;
+  return{start(){reset();cancelAnimationFrame(raf);loop()},stop(){cancelAnimationFrame(raf)}};
+})();
+
+/* ---------- TIC TAC TOE ---------- */
+(()=>{
+  const B=$('#ttt'),S=$('#ttt-status');let b,turn,done;const sc={X:0,O:0,D:0};
+  const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  for(let i=0;i<9;i++){const c=document.createElement('button');c.className='cell';c.setAttribute('aria-label','Kotak '+(i+1));c.onclick=()=>play(i);B.appendChild(c)}
+  const cells=[...B.children];
+  function reset(){b=Array(9).fill('');turn='X';done=false;cells.forEach(c=>{c.textContent='';c.className='cell';c.disabled=false});S.textContent='Giliran: X'}
+  function play(i){
+    if(b[i]||done)return;
+    b[i]=turn;cells[i].textContent=turn;cells[i].classList.add(turn.toLowerCase());
+    const w=L.find(l=>l.every(k=>b[k]===turn));
+    if(w){done=true;w.forEach(k=>cells[k].classList.add('win'));sc[turn]++;S.textContent='🎉 '+turn+' menang!';cells.forEach(c=>c.disabled=true)}
+    else if(b.every(Boolean)){done=true;sc.D++;S.textContent='Seri! 🤝'}
+    else{turn=turn==='X'?'O':'X';S.textContent='Giliran: '+turn}
+    $('#sx').textContent=sc.X;$('#so').textContent=sc.O;$('#sd').textContent=sc.D;
+  }
+  $('#ttt-reset').onclick=reset;reset();
+})();
+
+/* ---------- LEAFVISION ---------- */
+// Isi dengan URL model Teachable Machine kamu (contoh: "https://teachablemachine.withgoogle.com/models/XXXX/")
+// Jika kosong, halaman berjalan dalam MODE DEMO (hasil simulasi, bukan prediksi nyata).
+const LEAF_MODEL_URL="";
+(()=>{
+  const inp=$('#leaf-input'),img=$('#leaf-img'),btn=$('#btn-analyze'),res=$('#leaf-res'),drop=$('#drop');
+  $('#leaf-note').textContent=LEAF_MODEL_URL?'Model: Teachable Machine':'MODE DEMO · hasil bersifat simulasi, belum memakai model AI sungguhan.';
+  $('#btn-pick').onclick=()=>inp.click();
+  const load=f=>{if(!f||!f.type.startsWith('image/'))return;img.src=URL.createObjectURL(f);img.style.display='block';$('#leaf-ph').style.display='none';btn.disabled=false};
+  inp.onchange=e=>load(e.target.files[0]);
+  ['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over')}));
+  ['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over')}));
+  drop.addEventListener('drop',e=>load(e.dataTransfer.files[0]));
+  const labels=['🍃 Daun Sehat','🌿 Menguning / Kurang Nutrisi','🍂 Bercak Daun / Jamur'];
+  let model;
+  async function predict(){
+    if(LEAF_MODEL_URL&&window.tmImage){
+      model=model||await tmImage.load(LEAF_MODEL_URL+'model.json',LEAF_MODEL_URL+'metadata.json');
+      const p=await model.predict(img);return p.map(o=>({n:o.className,v:o.probability})).sort((a,b)=>b.v-a.v);
+    }
+    await new Promise(r=>setTimeout(r,1100));
+    const r=labels.map(()=>Math.random()+.05),s=r.reduce((a,b)=>a+b);
+    return labels.map((n,i)=>({n,v:r[i]/s})).sort((a,b)=>b.v-a.v);
+  }
+  btn.onclick=async()=>{
+    btn.disabled=true;res.innerHTML='<div class="empty"><span class="spin">🌀</span><br>Menganalisis gambar…</div>';
+    try{
+      const p=await predict();
+      res.innerHTML='<div class="verdict">'+p[0].n+'</div><div style="font-size:13px;color:#4A4A4A">Keyakinan tertinggi: '+(p[0].v*100).toFixed(1)+'%</div>'+
+        p.map(o=>'<div class="bar"><span><em style="font-style:normal">'+o.n+'</em><b>'+(o.v*100).toFixed(1)+'%</b></span><div><i data-w="'+(o.v*100)+'"></i></div></div>').join('');
+      requestAnimationFrame(()=>$$('#leaf-res .bar i').forEach(i=>i.style.width=i.dataset.w+'%'));
+    }catch(e){res.innerHTML='<div class="empty">⚠️ Gagal menganalisis. Coba gambar lain.</div>'}
+    btn.disabled=false;
+  };
+})();
+
+/* ---------- MOONCAKE: countdown, WA, quiz ---------- */
+(()=>{
+  const target=new Date('2026-09-25T00:00:00+07:00'),box=$('#cd');
+  function tick(){
+    const d=target-new Date();
+    if(d<=0){box.innerHTML='<div class="cd"><b>🌕</b><span>Festival telah berlangsung</span></div>';return}
+    const v=[['Hari',Math.floor(d/864e5)],['Jam',Math.floor(d/36e5)%24],['Menit',Math.floor(d/6e4)%60],['Detik',Math.floor(d/1e3)%60]];
+    box.innerHTML=v.map(([l,n])=>'<div class="cd"><b>'+String(n).padStart(2,'0')+'</b><span>'+l+'</span></div>').join('');
+  }
+  tick();setInterval(tick,1000);
+
+  const nm=$('#wa-name'),msg=()=>`Halo ${nm.value.trim()||'Sahabat'}! 🥮 Selamat Hari Raya Festival Kue Bulan 2026 (Mid-Autumn Festival)! Semoga kebahagiaan selalu menyertai kita! 🌕✨`;
+  const up=()=>$('#wa-prev').textContent=msg();nm.oninput=up;up();
+  $('#wa-send').onclick=()=>window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(msg()),'_blank','noopener');
+
+  const Q=[
+    {q:'Siapakah nama Dewi Bulan dalam legenda utama?',o:['Chang\'e (嫦娥)','Mulan (木兰)','Guanyin (观音)'],a:0},
+    {q:'Kue apa yang paling identik dengan festival ini?',o:['Kue Keranjang','Kue Bulan (月饼)','Kue Lapis'],a:1},
+    {q:'Festival Kue Bulan dirayakan pada bulan apa menurut kalender Imlek?',o:['Bulan ke-8','Bulan ke-1','Bulan ke-12'],a:0},
+    {q:'Hewan apa yang menemani Chang\'e di bulan dalam legenda?',o:['Naga','Kelinci Giok','Burung Phoenix'],a:1}
+  ];
+  let i=0,s=0;
+  function show(){
+    const q=Q[i];$('#q-num').textContent='SOAL '+(i+1)+'/'+Q.length;$('#q-score').textContent='SKOR '+s;
+    $('#quiz-q').textContent=q.q;$('#quiz-msg').textContent='';$('#quiz-next').style.display='none';
+    $('#quiz-opts').innerHTML='';
+    q.o.forEach((t,k)=>{const b=document.createElement('button');b.className='opt';b.textContent=t;
+      b.onclick=()=>{
+        $$('#quiz-opts .opt').forEach((o,j)=>{o.disabled=true;if(j===q.a)o.classList.add('ok')});
+        if(k===q.a){s++;$('#quiz-msg').textContent='✅ Benar!'}else{b.classList.add('no');$('#quiz-msg').textContent='❌ Kurang tepat.'}
+        $('#q-score').textContent='SKOR '+s;
+        const n=$('#quiz-next');n.style.display='inline-flex';n.textContent=i<Q.length-1?'Lanjut →':'Lihat Hasil';
+      };$('#quiz-opts').appendChild(b)});
+  }
+  $('#quiz-next').onclick=()=>{
+    if(i<Q.length-1){i++;show()}
+    else{$('#quiz-q').textContent='Selesai! Skor kamu '+s+' dari '+Q.length+(s===Q.length?' 🏆 Sempurna!':' 🥮');
+      $('#quiz-opts').innerHTML='';$('#quiz-msg').textContent='';$('#quiz-next').textContent='↻ Ulangi';
+      $('#quiz-next').onclick=()=>{i=0;s=0;location.hash='#mooncake';window.__restart()}}
+  };
+  window.__restart=()=>{$('#quiz-next').onclick=null;location.reload()};
+  show();
+})();
+</script>
+</body>
+</html>
